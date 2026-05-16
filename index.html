@@ -1,0 +1,1612 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>las chicas van al teatro</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cream: #F5F0E8;
+  --ink: #1A1410;
+  --red: #C0392B;
+  --red-light: #F9EDED;
+  --gold: #B8860B;
+  --gold-light: #FBF5E0;
+  --border: rgba(26,20,16,0.12);
+  --muted: rgba(26,20,16,0.45);
+  --card: #FFFDF8;
+  --shadow: 0 2px 16px rgba(26,20,16,0.08);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--cream);
+  color: var(--ink);
+  min-height: 100vh;
+}
+
+/* ── HEADER ── */
+.header {
+  background: var(--ink);
+  color: var(--cream);
+  padding: 1.2rem 1.5rem 1rem;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.header-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+.header-title em { font-style: italic; color: #E8C99A; }
+.user-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 999px;
+  padding: 5px 12px 5px 5px;
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--cream);
+  white-space: nowrap;
+}
+.avatar {
+  width: 26px; height: 26px;
+  background: var(--red);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 500;
+}
+
+/* ── NAV ── */
+nav {
+  background: var(--ink);
+  border-top: 1px solid rgba(255,255,255,0.08);
+  display: flex;
+  overflow-x: auto;
+}
+nav button {
+  flex: 1;
+  min-width: 80px;
+  padding: 10px 4px;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: rgba(232,201,154,0.5);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.18s;
+}
+nav button.active {
+  color: #E8C99A;
+  border-bottom-color: #E8C99A;
+}
+
+/* ── MAIN ── */
+main { padding: 1.25rem 1rem 5rem; max-width: 700px; margin: 0 auto; }
+
+@media (min-width: 900px) {
+  main { max-width: 900px; padding: 1.5rem 2rem 5rem; }
+  .resumen-grid { grid-template-columns: repeat(4, 1fr); }
+  .resumen-card.full { grid-column: span 4; }
+  .obra-card { padding: 1.1rem 1.25rem; }
+  .profile-cards { grid-template-columns: repeat(3, 1fr); }
+  nav button { font-size: 13px; padding: 12px 8px; }
+}
+
+/* ── SECTIONS ── */
+.section { display: none; }
+.section.active { display: block; }
+
+/* ── OBRA CARD ── */
+.obra-card {
+  cursor: pointer;
+  transition: box-shadow 0.15s, transform 0.1s;
+}
+.obra-card:hover { box-shadow: 0 4px 20px rgba(26,20,16,0.13); transform: translateY(-1px); }
+
+.comentario-item {
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+.comentario-item:last-child { border-bottom: none; }
+.comentario-autor {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 3px;
+}
+.sin-comentarios {
+  font-size: 13px;
+  color: var(--muted);
+  font-style: italic;
+  padding: 8px 0;
+}
+
+.obra-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1rem;
+  margin-bottom: 10px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  box-shadow: var(--shadow);
+}
+.obra-img {
+  width: 62px; height: 62px;
+  border-radius: 8px;
+  object-fit: cover;
+  background: #EDE8DF;
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px;
+  overflow: hidden;
+}
+.obra-img img { width: 100%; height: 100%; object-fit: cover; border-radius: 8px; }
+.obra-body { flex: 1; min-width: 0; }
+.obra-titulo {
+  font-family: 'Playfair Display', serif;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 2px;
+}
+.obra-meta { font-size: 12px; color: var(--muted); margin-bottom: 7px; }
+.scores-row { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+.pill {
+  font-size: 12px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-weight: 500;
+}
+.pill-avg { background: var(--ink); color: var(--cream); }
+.pill-user { background: var(--gold-light); color: var(--gold); border: 1px solid rgba(184,134,11,0.2); }
+.pill-other { background: var(--red-light); color: var(--red); border: 1px solid rgba(192,57,43,0.15); }
+.pill-delta-lo { background: #EAF3DE; color: #336600; }
+.pill-delta-md { background: #FEF3E0; color: #7A4500; }
+.pill-delta-hi { background: var(--red-light); color: var(--red); }
+.rank-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  color: rgba(26,20,16,0.2);
+  min-width: 24px;
+  padding-top: 2px;
+  text-align: center;
+}
+
+/* ── STAT GRID ── */
+.stat-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin-bottom: 1.25rem; }
+.stat-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.7rem 0.9rem;
+}
+.stat-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; }
+.stat-val { font-family: 'Playfair Display', serif; font-size: 20px; }
+.stat-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+/* ── SECTION LABEL ── */
+.resumen-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 1.25rem;
+}
+.resumen-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.85rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.resumen-card.full { grid-column: span 2; }
+.resumen-icon { font-size: 20px; margin-bottom: 2px; }
+.resumen-label {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.resumen-val {
+  font-family: 'Playfair Display', serif;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--ink);
+}
+.resumen-sub {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 1px;
+}
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 1.2rem 0 0.7rem;
+}
+
+/* ── ACUERDO ── */
+.compare-sel {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 1rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.compare-sel select {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  padding: 6px 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--card);
+  color: var(--ink);
+  flex: 1;
+}
+.vs-label { font-size: 12px; color: var(--muted); font-style: italic; }
+
+.bar-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+.bar-key { font-size: 12px; width: 32px; text-align: right; color: var(--muted); }
+.bar-wrap { flex: 1; height: 12px; background: #EDE8DF; border-radius: 3px; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 3px; background: var(--red); }
+.bar-n { font-size: 11px; color: var(--muted); min-width: 18px; }
+
+/* ── PERFILES ── */
+.profile-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.profile-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1rem;
+}
+.profile-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 16px;
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+.prow { display: flex; justify-content: space-between; font-size: 12.5px; padding: 3px 0; }
+.prow span:last-child { font-weight: 500; }
+
+/* ── FAB ── */
+.fab {
+  position: fixed;
+  bottom: 1.5rem; right: 1.5rem;
+  background: var(--red);
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  padding: 13px 22px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(192,57,43,0.35);
+  display: flex; align-items: center; gap: 7px;
+  z-index: 100;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.fab:hover { transform: translateY(-1px); box-shadow: 0 6px 24px rgba(192,57,43,0.4); }
+
+/* ── MODAL OVERLAY ── */
+.overlay {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(26,20,16,0.55);
+  z-index: 200;
+  align-items: flex-end;
+  justify-content: center;
+}
+.overlay.open { display: flex; }
+.modal {
+  background: var(--cream);
+  border-radius: 18px 18px 0 0;
+  padding: 1.5rem 1.25rem 2rem;
+  width: 100%;
+  max-width: 680px;
+  max-height: 92vh;
+  overflow-y: auto;
+  animation: slideUp 0.22s ease;
+}
+@keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+
+.modal-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.15rem;
+  margin-bottom: 1.2rem;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.modal-close {
+  background: none; border: none; font-size: 20px;
+  cursor: pointer; color: var(--muted); line-height: 1;
+}
+
+/* ── FORM ── */
+.form-group { margin-bottom: 0.9rem; }
+.form-group label { display: block; font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 5px; }
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  padding: 9px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--card);
+  color: var(--ink);
+  outline: none;
+  transition: border-color 0.15s;
+}
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus { border-color: var(--red); }
+
+.stars-row { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px; }
+.star-btn {
+  padding: 6px 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--card);
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.12s;
+  font-family: 'DM Sans', sans-serif;
+}
+.star-btn.selected { background: var(--ink); color: var(--cream); border-color: var(--ink); }
+
+.btn-primary {
+  width: 100%;
+  padding: 12px;
+  background: var(--ink);
+  color: var(--cream);
+  border: none;
+  border-radius: 10px;
+  font-family: 'Playfair Display', serif;
+  font-size: 15px;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  transition: background 0.15s;
+}
+.btn-primary:hover { background: #2e2520; }
+.btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.btn-sec {
+  width: 100%;
+  padding: 10px;
+  background: none;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  cursor: pointer;
+  margin-top: 0.4rem;
+}
+
+/* ── LOGIN ── */
+.login-wrap {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1.5rem;
+  gap: 0;
+}
+.login-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  text-align: center;
+  line-height: 1.15;
+  margin-bottom: 0.4rem;
+}
+.login-title em { font-style: italic; color: var(--red); }
+.login-sub { font-size: 14px; color: var(--muted); text-align: center; margin-bottom: 2rem; }
+.login-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 1.5rem;
+  width: 100%;
+  max-width: 360px;
+  box-shadow: var(--shadow);
+}
+.login-tabs { display: flex; gap: 4px; margin-bottom: 1.2rem; background: #EDE8DF; border-radius: 8px; padding: 3px; }
+.login-tab {
+  flex: 1; padding: 7px; border: none; background: none;
+  border-radius: 6px; font-family: 'DM Sans', sans-serif; font-size: 13px;
+  cursor: pointer; color: var(--muted); transition: all 0.15s;
+}
+.login-tab.active { background: var(--card); color: var(--ink); font-weight: 500; }
+
+.msg { font-size: 13px; padding: 8px 12px; border-radius: 8px; margin-top: 0.5rem; display: none; }
+.msg.err { background: var(--red-light); color: var(--red); display: block; }
+.msg.ok { background: #EAF3DE; color: #336600; display: block; }
+
+.empty-state { text-align: center; padding: 3rem 1rem; color: var(--muted); }
+.empty-state .big { font-size: 2.5rem; margin-bottom: 0.5rem; }
+.empty-state p { font-size: 14px; }
+
+.loading { text-align: center; padding: 2rem; color: var(--muted); font-style: italic; font-size: 14px; }
+
+.sugg-list {
+  position: absolute;
+  top: 100%; left: 0; right: 0;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 0 0 10px 10px;
+  z-index: 300;
+  box-shadow: var(--shadow);
+  max-height: 200px;
+  overflow-y: auto;
+}
+.sugg-item {
+  padding: 9px 12px;
+  font-size: 13px;
+  cursor: pointer;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.sugg-item:last-child { border-bottom: none; }
+.sugg-item:hover { background: var(--cream); }
+.tags-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 4px;
+}
+.tag-btn {
+  padding: 5px 11px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--card);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  cursor: pointer;
+  color: var(--ink);
+  transition: all 0.12s;
+  white-space: nowrap;
+}
+.tag-btn:hover { border-color: var(--red); color: var(--red); }
+.tag-btn.selected { background: var(--ink); color: var(--cream); border-color: var(--ink); }
+.tag-btn.disabled { opacity: 0.35; cursor: not-allowed; }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════
+     LOGIN SCREEN
+══════════════════════════════════════════ -->
+<div id="loginScreen" class="login-wrap">
+  <p style="font-size:28px;margin-bottom:0.5rem">🎭</p>
+  <h1 class="login-title">las chicas van<br><em>al teatro</em></h1>
+  <p class="login-sub">y no quieren olvidarse de nada</p>
+
+  <div class="login-card">
+    <div class="login-tabs">
+      <button class="login-tab active" data-tab="ingresar" onclick="switchLoginTab('ingresar')">ingresar</button>
+      <button class="login-tab" data-tab="registrar" onclick="switchLoginTab('registrar')">registrarme</button>
+    </div>
+
+    <div id="tab-ingresar">
+      <div class="form-group">
+        <label>tu nombre</label>
+        <input id="li-nombre" type="text" placeholder="ej: SALCHICHA" autocomplete="off">
+      </div>
+      <div class="form-group">
+        <label>PIN (4 dígitos)</label>
+        <input id="li-pin" type="password" inputmode="numeric" maxlength="4" placeholder="••••">
+      </div>
+      <div id="li-msg" class="msg"></div>
+      <button class="btn-primary" onclick="doLogin()">entrar</button>
+    </div>
+
+    <div id="tab-registrar" style="display:none">
+      <div class="form-group">
+        <label>elegí un nombre</label>
+        <input id="re-nombre" type="text" placeholder="ej: SALCHICHA" autocomplete="off">
+      </div>
+      <div class="form-group">
+        <label>elegí un PIN (4 dígitos)</label>
+        <input id="re-pin" type="password" inputmode="numeric" maxlength="4" placeholder="••••">
+      </div>
+      <div id="re-msg" class="msg"></div>
+      <button class="btn-primary" onclick="doRegistrar()">crear cuenta</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     APP
+══════════════════════════════════════════ -->
+<div id="appScreen" style="display:none">
+  <div class="header">
+    <div class="header-title">las chicas van<br><em>al teatro</em> 🎭</div>
+    <div class="user-badge" onclick="doLogout()">
+      <div class="avatar" id="avatarLetters"></div>
+      <span id="headerNombre"></span>
+      <span style="font-size:11px;opacity:0.6;margin-left:2px">· salir</span>
+    </div>
+  </div>
+  <nav>
+    <button class="active" onclick="showTab('ranking', this)">ranking</button>
+    <button onclick="showTab('acuerdo', this)">acuerdo</button>
+    <button onclick="showTab('perfiles', this)">perfiles</button>
+    <button onclick="showTab('historial', this)">historial</button>
+  </nav>
+
+  <main>
+    <!-- ── RANKING ── -->
+    <div id="sec-ranking" class="section active">
+      <div class="resumen-grid" id="statsGlobal"></div>
+      <div class="sec-label">ranking · promedio entre todas</div>
+      <div id="listaRanking"><div class="loading">cargando obras…</div></div>
+    </div>
+
+    <!-- ── ACUERDO ── -->
+    <div id="sec-acuerdo" class="section">
+      <div class="compare-sel">
+        <select id="sel-a"></select>
+        <span class="vs-label">vs.</span>
+        <select id="sel-b"></select>
+        <button class="btn-primary" style="width:auto;padding:8px 16px;font-family:'DM Sans',sans-serif;font-size:13px;" onclick="calcAcuerdo()">comparar</button>
+      </div>
+      <div id="acuerdoContent"><div class="loading">seleccioná dos usuarias para comparar</div></div>
+    </div>
+
+    <!-- ── PERFILES ── -->
+    <div id="sec-perfiles" class="section">
+      <div id="perfilesContent"><div class="loading">cargando perfiles…</div></div>
+    </div>
+
+    <!-- ── HISTORIAL ── -->
+    <div id="sec-historial" class="section">
+      <div class="sec-label">cronológico · más reciente primero</div>
+      <div id="listaHistorial"><div class="loading">cargando historial…</div></div>
+    </div>
+  </main>
+
+  <button class="fab" onclick="openModal('obra')">+ obra</button>
+</div>
+
+<!-- ══════════════════════════════════════════
+     MODAL: AGREGAR OBRA
+══════════════════════════════════════════ -->
+<div class="overlay" id="modal-obra">
+  <div class="modal">
+    <div class="modal-title">
+      <span>nueva obra</span>
+      <button class="modal-close" onclick="closeModal('obra')">✕</button>
+    </div>
+
+    <!-- TÍTULO con autocomplete -->
+    <div class="form-group" style="position:relative">
+      <label>título *</label>
+      <input id="ob-titulo" type="text" placeholder="ej: Las siamesas" autocomplete="off"
+             oninput="buscarObrasExistentes(this.value)" onblur="setTimeout(()=>hideSuggestions('titulo-sugg'),200)">
+      <div id="titulo-sugg" class="sugg-list" style="display:none"></div>
+    </div>
+    <div id="ob-existente-aviso" style="display:none;font-size:12px;color:#336600;background:#EAF3DE;border-radius:8px;padding:8px 12px;margin-bottom:0.5rem">
+      ✓ Esta obra ya existe — se va a agregar tu puntaje a la que ya está cargada.
+    </div>
+
+    <!-- SALA con datalist curado -->
+    <div class="form-group">
+      <label>teatro / sala</label>
+      <input id="ob-teatro" type="text" list="salas-list" placeholder="escribí para buscar…" autocomplete="off">
+      <datalist id="salas-list"></datalist>
+    </div>
+
+    <div class="form-group">
+      <label>fecha *</label>
+      <input id="ob-fecha" type="date" required>
+    </div>
+    <div class="form-group">
+      <label>qué fue <span style="font-weight:300;text-transform:none;letter-spacing:0">(hasta 3)</span></label>
+      <div class="tags-grid" id="tagsGrid"></div>
+    </div>
+
+    <div class="form-group">
+      <label>tu puntaje *</label>
+      <div class="stars-row" id="starsRow"></div>
+    </div>
+    <div class="form-group">
+      <label>nota / comentario (opcional)</label>
+      <textarea id="ob-nota" rows="2" placeholder="algo que quieras recordar…"></textarea>
+    </div>
+    <div id="ob-msg" class="msg"></div>
+    <button class="btn-primary" id="ob-btn" onclick="guardarObra()">guardar</button>
+    <button class="btn-sec" onclick="closeModal('obra')">cancelar</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+<!-- ══════════════════════════════════════════
+     MODAL: DETALLE OBRA
+══════════════════════════════════════════ -->
+<!-- ══════════════════════════════════════════
+     MODAL: PERFIL AJENO
+══════════════════════════════════════════ -->
+<div class="overlay" id="modal-perfil">
+  <div class="modal">
+    <div class="modal-title">
+      <span id="perfil-nombre-label" style="font-family:'Playfair Display',serif"></span>
+      <button class="modal-close" onclick="closeModal('perfil')">✕</button>
+    </div>
+    <div id="perfil-stats" style="margin-bottom:1.2rem"></div>
+    <div class="sec-label">su historial</div>
+    <div id="perfil-historial"></div>
+  </div>
+</div>
+
+<div class="overlay" id="modal-detalle">
+  <div class="modal">
+    <div class="modal-title">
+      <span id="detalle-titulo" style="font-family:'Playfair Display',serif;font-size:1.1rem"></span>
+      <button class="modal-close" onclick="closeModal('detalle')">✕</button>
+    </div>
+    <div id="detalle-teatro" style="font-size:12px;color:var(--muted);margin-bottom:1rem"></div>
+    <div id="detalle-tags" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1.2rem"></div>
+    <div class="sec-label">puntajes</div>
+    <div id="detalle-puntajes" style="margin-bottom:1.2rem"></div>
+    <div class="sec-label">comentarios</div>
+    <div id="detalle-comentarios"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     MODAL: PUNTUAR OBRA EXISTENTE
+══════════════════════════════════════════ -->
+<div class="overlay" id="modal-puntuar">
+  <div class="modal">
+    <div class="modal-title">
+      <span id="puntuar-titulo-label">puntuar obra</span>
+      <button class="modal-close" onclick="closeModal('puntuar')">✕</button>
+    </div>
+    <div class="form-group">
+      <label>tu puntaje *</label>
+      <div class="stars-row" id="starsRowPuntuar"></div>
+    </div>
+    <div class="form-group">
+      <label>nota / comentario (opcional)</label>
+      <textarea id="puntuar-nota" rows="2" placeholder="algo que quieras recordar…"></textarea>
+    </div>
+    <div id="puntuar-msg" class="msg"></div>
+    <button class="btn-primary" onclick="guardarPuntaje()">guardar puntaje</button>
+    <button class="btn-sec" onclick="closeModal('puntuar')">cancelar</button>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════
+//  CONFIG
+// ══════════════════════════════════════════
+const SB_URL  = 'https://vmzvsascpvjywmpbfpwm.supabase.co';
+const SB_KEY  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZtenZzYXNjcHZqeXdtcGJmcHdtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4NzMxMjksImV4cCI6MjA5NDQ0OTEyOX0.RoKK5h3nZFna29OL-QbiByBG83SXxsx96djNOq7tlcs';
+const HEADERS = { 'Content-Type': 'application/json', 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY };
+
+// ══════════════════════════════════════════
+//  STATE
+// ══════════════════════════════════════════
+let currentUser = null;  // { id, nombre }
+let allObras    = [];
+let allPuntos   = [];
+let allUsers    = [];
+let puntuarObraId = null;
+let selectedScore = null;
+let selectedScorePuntuar = null;
+
+// ══════════════════════════════════════════
+//  HASH PIN (simple, client-side)
+// ══════════════════════════════════════════
+async function hashPin(pin) {
+  const buf  = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(pin));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+}
+
+// ══════════════════════════════════════════
+//  SUPABASE HELPERS
+// ══════════════════════════════════════════
+async function sb(path, opts={}) {
+  const res = await fetch(SB_URL + '/rest/v1/' + path, { headers: HEADERS, ...opts });
+  if (!res.ok) { const e = await res.json(); throw new Error(e.message || 'Error'); }
+  try { return await res.json(); } catch { return null; }
+}
+
+// ══════════════════════════════════════════
+//  LOGIN / REGISTER
+// ══════════════════════════════════════════
+function switchLoginTab(tab) {
+  document.getElementById('tab-ingresar').style.display  = tab==='ingresar'  ? '' : 'none';
+  document.getElementById('tab-registrar').style.display = tab==='registrar' ? '' : 'none';
+  document.querySelectorAll('.login-tab').forEach(b => {
+    b.classList.toggle('active', b.dataset.tab === tab);
+  });
+}
+
+async function doLogin() {
+  const nombre = document.getElementById('li-nombre').value.trim();
+  const pin    = document.getElementById('li-pin').value.trim();
+  const msg    = document.getElementById('li-msg');
+  msg.className = 'msg';
+  if (!nombre || pin.length < 4) { showMsg(msg,'Completá nombre y PIN de 4 dígitos','err'); return; }
+  try {
+    const hash = await hashPin(pin);
+    const rows = await sb(`usuarias?nombre=eq.${encodeURIComponent(nombre)}&select=id,nombre,pin_hash`);
+    if (!rows.length) { showMsg(msg,'No existe esa usuaria. ¿Querés registrarte?','err'); return; }
+    if (rows[0].pin_hash !== hash) { showMsg(msg,'PIN incorrecto','err'); return; }
+    setUser({ id: rows[0].id, nombre: rows[0].nombre });
+  } catch(e) { showMsg(msg, e.message, 'err'); }
+}
+
+async function doRegistrar() {
+  const nombre = document.getElementById('re-nombre').value.trim();
+  const pin    = document.getElementById('re-pin').value.trim();
+  const msg    = document.getElementById('re-msg');
+  msg.className = 'msg';
+  if (!nombre || pin.length < 4) { showMsg(msg,'Completá nombre y PIN de 4 dígitos','err'); return; }
+  try {
+    const hash = await hashPin(pin);
+    const rows = await sb('usuarias?select=id&nombre=eq.' + encodeURIComponent(nombre));
+    if (rows.length) { showMsg(msg,'Ese nombre ya existe. Elegí otro.','err'); return; }
+    const [created] = await sb('usuarias?select=id,nombre', {
+      method: 'POST',
+      headers: { ...HEADERS, 'Prefer': 'return=representation' },
+      body: JSON.stringify({ nombre, pin_hash: hash })
+    });
+    setUser({ id: created.id, nombre: created.nombre });
+  } catch(e) { showMsg(msg, e.message, 'err'); }
+}
+
+function setUser(u) {
+  currentUser = u;
+  localStorage.setItem('chicas_user', JSON.stringify(u));
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('appScreen').style.display   = '';
+  document.getElementById('headerNombre').textContent  = u.nombre;
+  document.getElementById('avatarLetters').textContent = u.nombre[0].toUpperCase();
+  loadAll();
+}
+
+function doLogout() {
+  if (!confirm('¿Salir?')) return;
+  currentUser = null;
+  localStorage.removeItem('chicas_user');
+  document.getElementById('appScreen').style.display   = 'none';
+  document.getElementById('loginScreen').style.display = '';
+}
+
+function showMsg(el, txt, type) { el.textContent = txt; el.className = 'msg ' + type; }
+
+// ══════════════════════════════════════════
+//  LOAD DATA
+// ══════════════════════════════════════════
+async function loadAll() {
+  [allObras, allPuntos, allUsers] = await Promise.all([
+    sb('obras?select=*&order=fecha.desc'),
+    sb('puntuaciones?select=*'),
+    sb('usuarias?select=id,nombre&order=nombre.asc')
+  ]);
+  renderRanking();
+  renderHistorial();
+  renderPerfiles();
+  poblarSelects();
+  initSalas();
+}
+
+// ══════════════════════════════════════════
+//  SALAS PORTEÑAS
+// ══════════════════════════════════════════
+const TAGS = [
+  'qué carajo','qué dolor','qué risa','qué inteligente','qué inesperado',
+  'qué predecible', 'qué noni', 'qué vacío', 'qué buen guión',
+  'qué buenas actuaciones', 'qué buenas luces', 'qué buena música',
+  'qué ternura','qué hot','qué bronca','qué incómodo','qué político',
+  'qué raro bien','qué raro mal','qué físico','qué poético',
+  'qué largo bien','qué largo mal','qué corto bien','qué corto mal',
+];
+let selectedTags = [];
+
+function buildTags(containerId) {
+  selectedTags = [];
+  document.getElementById(containerId).innerHTML = TAGS.map(t =>
+    `<button class="tag-btn" onclick="toggleTag(this,'${t}','${containerId}')">${t}</button>`
+  ).join('');
+}
+
+function toggleTag(btn, tag, containerId) {
+  if (btn.classList.contains('selected')) {
+    btn.classList.remove('selected');
+    selectedTags = selectedTags.filter(t=>t!==tag);
+  } else {
+    if (selectedTags.length >= 3) return; // máximo 3
+    btn.classList.add('selected');
+    selectedTags.push(tag);
+  }
+  // deshabilitar los no seleccionados si llegamos a 3
+  document.querySelectorAll(`#${containerId} .tag-btn`).forEach(b => {
+    if (!b.classList.contains('selected')) {
+      b.classList.toggle('disabled', selectedTags.length >= 3);
+    }
+  });
+}
+
+function setTagsFromString(str) {
+  selectedTags = str ? str.split(',').map(s=>s.trim()).filter(Boolean) : [];
+  document.querySelectorAll('#tagsGrid .tag-btn').forEach(b => {
+    const selected = selectedTags.includes(b.textContent.trim());
+    b.classList.toggle('selected', selected);
+  });
+  document.querySelectorAll('#tagsGrid .tag-btn').forEach(b => {
+    if (!b.classList.contains('selected'))
+      b.classList.toggle('disabled', selectedTags.length >= 3);
+  });
+}
+const SALAS_BA = [
+  // ── CALLE CORRIENTES ──
+  "Teatro Broadway (Corrientes)","Teatro Lola Membrives (Corrientes)","Teatro Metropolitan Sura (Corrientes)",
+  "Teatro El Nacional (Corrientes)","Teatro Astral (Corrientes)","Teatro Maipo (Corrientes)",
+  "Teatro Multiteatro (Corrientes)","Teatro Picadilly (Corrientes)","Teatro Gran Rex (Corrientes)",
+  "Teatro Ópera (Corrientes)","Teatro La Plaza (Corrientes)","Teatro Liceo (Corrientes)",
+  "Teatro Auditorium (Corrientes)","Teatro Comedia (Corrientes)","Teatro Tabaris (Corrientes)",
+  "Teatro Alvear (Corrientes)","Teatro Presidente Alvear","Teatro Premier (Corrientes)",
+
+  // ── OFICIALES ──
+  "Teatro Colón","Teatro San Martín","Teatro Cervantes","Teatro Regio",
+  "Teatro de la Ribera","Teatro Sarmiento","Teatro del Pueblo",
+
+  // ── OFF CORRIENTES / MEDIOS ──
+  "El Método Kairós","Camarín de las Musas","El Portón de Sánchez",
+  "La Carpintería","Timbre 4","El Extranjero","Teatro Pata de Ganso",
+  "Vera Vera Teatro","La Casona del Teatro","Teatro IFT","El Cubo",
+  "Espacio Callejón","El Galpón de Guevara","La Tertulia",
+  "Teatro Beckett","Teatro Anfitrión","El Tinglado","Hasta Trilce",
+  "Teatro del Abasto","El Vitral","La Mueca","Pan y Arte",
+  "Nün Teatro Espacio","Teatro Tadrón","La Covacha",
+  "Abasto Social Club","Club de Teatro","CELCIT",
+
+  // ── UNDER / ALTERNATIVOS ──
+  "Santos 4040","La Tangente","Casa Brandon","Espacio Aguirre",
+  "Espacio SAGAI","El Konex / Ciudad Cultural Konex","Matienzo Centro Cultural",
+  "CC Matienzo","La Usina del Arte","Fundación PROA",
+  "Centro Cultural de la Cooperación","Centro Cultural Ricardo Rojas",
+  "Centro Cultural Recoleta","Centro Cultural Kirchner (CCK)",
+  "Centro Cultural Borges","Centro Cultural San Martín",
+  "Centro Cultural 25 de Mayo","Centro Cultural Torquato Tasso",
+  "Centro Cultural Homero Manzi","Centro Cultural Caras y Caretas",
+  "Centro Cultural General San Martín","La Scala de San Telmo",
+  "Hasta Trilce","El Gato Negro","Café Vinilo","La Trastienda",
+  "ND Ateneo","Club Cultural Matienzo","Espacio Cultural Nuestros Hijos (ECUNHI)",
+  "El Pasillo (IMPA)","Centro Cultural de la Memoria Haroldo Conti",
+  "Espacio Cultural Universitario (UBA)","Alianza Francesa",
+  "Teatro del Pueblo","Teatro Liberarte","El Odeón","La Ballena Azul",
+
+  // ── CENTROS CULTURALES BARRIALES ──
+  "CC Floresta","CC Haedo","CC La Ferrere","CC Palermo","CC Caballito",
+  "CC Barracas","CC Villa del Parque","CC Almagro","CC Boedo","CC Chacarita",
+  "CC Belgrano","CC Colegiales","CC Parque Patricios","CC Mataderos",
+  "CC Villa Urquiza","CC Saavedra","CC Lugano","CC Pompeya",
+
+  // ── OTROS CONOCIDOS ──
+  "Teatro Picasso","Teatro Premier","Teatro Empire","Teatro Regina",
+  "Teatro Margarita Xirgu","Teatro Payró","Teatro del Bardo",
+  "La Fábrica de Tortas","Espacio Polonia","Teatro África",
+  "La Plataforma","El Nuevo Apolo","El Taller de Bufones",
+];
+SALAS_BA.sort((a,b)=>a.localeCompare(b,'es'));
+
+function initSalas() {
+  const dl = document.getElementById('salas-list');
+  dl.innerHTML = SALAS_BA.map(s=>`<option value="${s}">`).join('');
+}
+
+// ══════════════════════════════════════════
+//  AUTOCOMPLETE OBRAS EXISTENTES
+// ══════════════════════════════════════════
+let obraExistenteSeleccionada = null;
+
+function buscarObrasExistentes(query) {
+  obraExistenteSeleccionada = null;
+  document.getElementById('ob-existente-aviso').style.display = 'none';
+  const sugg = document.getElementById('titulo-sugg');
+  if (!query || query.length < 2) { sugg.style.display='none'; return; }
+  const q = query.toLowerCase();
+  const matches = allObras.filter(o => o.titulo.toLowerCase().includes(q)).slice(0, 6);
+  if (!matches.length) { sugg.style.display='none'; return; }
+  sugg.innerHTML = matches.map(o => {
+    const pts = allPuntos.filter(p=>p.obra_id===o.id).length;
+    return `<div class="sugg-item" onmousedown="seleccionarObraExistente('${o.id}')">
+      <span style="flex:1">${o.titulo}</span>
+      <span class="sugg-badge">${pts} puntaje${pts!==1?'s':''}</span>
+    </div>`;
+  }).join('');
+  sugg.style.display = 'block';
+}
+
+function seleccionarObraExistente(id) {
+  const obra = allObras.find(o=>o.id===id);
+  if (!obra) return;
+  obraExistenteSeleccionada = obra;
+  document.getElementById('ob-titulo').value  = obra.titulo;
+  document.getElementById('ob-teatro').value  = obra.teatro || '';
+  document.getElementById('ob-fecha').value   = obra.fecha  || '';
+  setTagsFromString(obra.genero || '');
+  document.getElementById('titulo-sugg').style.display = 'none';
+  document.getElementById('ob-existente-aviso').style.display = 'block';
+}
+
+function hideSuggestions(id) {
+  const el = document.getElementById(id);
+  if (el) el.style.display = 'none';
+}
+
+// ══════════════════════════════════════════
+//  IMAGEN: placeholder con iniciales
+// ══════════════════════════════════════════
+function inicialesObra(titulo) {
+  return titulo.split(' ')
+    .filter(w => w.length > 2)
+    .slice(0, 2)
+    .map(w => w[0].toUpperCase())
+    .join('') || titulo[0].toUpperCase();
+}
+
+// colores para el placeholder basados en el título
+function colorPlaceholder(titulo) {
+  const paleta = [
+    ['#2C1654','#E8C99A'],['#4A0E0E','#F5C6C6'],['#0B3D2E','#B8E0CE'],
+    ['#1A2744','#C0CFEA'],['#3D2B00','#F0D9A0'],['#2A0A3A','#D4B8E8'],
+  ];
+  let hash = 0;
+  for (const c of titulo) hash = (hash * 31 + c.charCodeAt(0)) & 0xFFFF;
+  const [bg, fg] = paleta[hash % paleta.length];
+  return { bg, fg };
+}
+
+// ══════════════════════════════════════════
+//  RANKING
+// ══════════════════════════════════════════
+function renderRanking() {
+  const obras = obrasConStats();
+  const sorted = [...obras].filter(o=>o.avg!==null).sort((a,b)=>b.avg-a.avg);
+
+  // ── stats globales ──
+  const totalObras = obras.length;
+  const promedios  = obras.map(o=>o.avg).filter(n=>n!==null);
+  const promGlobal = promedios.length ? (promedios.reduce((a,b)=>a+b,0)/promedios.length).toFixed(1) : '—';
+
+  // más y menos gustada (promedio)
+  const mejorObra = sorted[0];
+  const peorObra  = [...sorted].reverse()[0];
+
+  // más veces fue al teatro (más puntuaciones)
+  const conteoXUser = {};
+  allUsers.forEach(u => { conteoXUser[u.id] = allPuntos.filter(p=>p.usuaria_id===u.id).length; });
+  const masVecesId  = Object.entries(conteoXUser).sort((a,b)=>b[1]-a[1])[0];
+  const masVecesU   = masVecesId ? allUsers.find(u=>u.id===masVecesId[0]) : null;
+
+  // vara baja (promedio más alto → puntúa alto = le gusta todo)
+  // vara alta (promedio más bajo → es más exigente)
+  const promedioXUser = allUsers.map(u => {
+    const pts = allPuntos.filter(p=>p.usuaria_id===u.id).map(p=>p.puntaje);
+    const avg = pts.length ? pts.reduce((a,b)=>a+b,0)/pts.length : null;
+    return { u, avg, n: pts.length };
+  }).filter(x=>x.avg!==null && x.n >= 1);
+
+  const varaBaja  = promedioXUser.sort((a,b)=>b.avg-a.avg)[0];  // promedio más alto
+  const varaAlta  = promedioXUser.sort((a,b)=>a.avg-b.avg)[0];  // promedio más bajo
+
+  // mayor acuerdo
+  const maxAcuerdo = obras.filter(o=>o.delta!==null).sort((a,b)=>a.delta-b.delta)[0];
+
+  document.getElementById('statsGlobal').innerHTML = `
+    <div class="resumen-grid">
+      <div class="resumen-card">
+        <div class="resumen-icon">🎭</div>
+        <div class="resumen-label">obras vistas</div>
+        <div class="resumen-val">${totalObras}</div>
+      </div>
+      <div class="resumen-card">
+        <div class="resumen-icon">★</div>
+        <div class="resumen-label">promedio general</div>
+        <div class="resumen-val">${promGlobal}</div>
+      </div>
+      <div class="resumen-card">
+        <div class="resumen-icon">🏆</div>
+        <div class="resumen-label">la que más nos gustó</div>
+        <div class="resumen-val">${mejorObra ? mejorObra.titulo : '—'}</div>
+        <div class="resumen-sub">${mejorObra ? '★ ' + mejorObra.avg.toFixed(1) + ' promedio' : ''}</div>
+      </div>
+      <div class="resumen-card">
+        <div class="resumen-icon">💀</div>
+        <div class="resumen-label">la que menos nos gustó</div>
+        <div class="resumen-val">${peorObra && peorObra !== mejorObra ? peorObra.titulo : '—'}</div>
+        <div class="resumen-sub">${peorObra && peorObra !== mejorObra ? '★ ' + peorObra.avg.toFixed(1) + ' promedio' : ''}</div>
+      </div>
+      <div class="resumen-card">
+        <div class="resumen-icon">🎟️</div>
+        <div class="resumen-label">la más salidora</div>
+        <div class="resumen-val">${masVecesU ? masVecesU.nombre : '—'}</div>
+        <div class="resumen-sub">${masVecesId ? masVecesId[1] + ' obras puntuadas' : ''}</div>
+      </div>
+      <div class="resumen-card">
+        <div class="resumen-icon">🤝</div>
+        <div class="resumen-label">en esta hay consenso</div>
+        <div class="resumen-val" style="font-size:13px">${maxAcuerdo ? maxAcuerdo.titulo : '—'}</div>
+        <div class="resumen-sub">${maxAcuerdo ? 'Δ ' + maxAcuerdo.delta.toFixed(1) : ''}</div>
+      </div>
+      <div class="resumen-card">
+        <div class="resumen-icon">😌</div>
+        <div class="resumen-label">la de la vara baja</div>
+        <div class="resumen-val">${varaBaja ? varaBaja.u.nombre : '—'}</div>
+        <div class="resumen-sub">${varaBaja ? 'promedio ★ ' + varaBaja.avg.toFixed(1) : ''}</div>
+      </div>
+      <div class="resumen-card">
+        <div class="resumen-icon">🧐</div>
+        <div class="resumen-label">epa que estamos exigentes</div>
+        <div class="resumen-val">${varaAlta ? varaAlta.u.nombre : '—'}</div>
+        <div class="resumen-sub">${varaAlta ? 'promedio ★ ' + varaAlta.avg.toFixed(1) : ''}</div>
+      </div>
+    </div>
+  `;
+
+  if (!sorted.length) { document.getElementById('listaRanking').innerHTML = emptyState('Todavía no hay obras','Agregá la primera con el botón +'); return; }
+  document.getElementById('listaRanking').innerHTML = sorted.map((o,i)=>obraCardHTML(o, i+1)).join('');
+}
+
+function obrasConStats() {
+  return allObras.map(o => {
+    const pts  = allPuntos.filter(p=>p.obra_id===o.id);
+    const vals = pts.map(p=>p.puntaje);
+    const avg  = vals.length ? vals.reduce((a,b)=>a+b,0)/vals.length : null;
+    // per user scores
+    const byUser = {};
+    pts.forEach(p => { byUser[p.usuaria_id] = p.puntaje; });
+    // delta: all pairs
+    const ids = Object.keys(byUser);
+    let deltas = [];
+    for (let i=0;i<ids.length;i++) for(let j=i+1;j<ids.length;j++)
+      deltas.push(Math.abs(byUser[ids[i]] - byUser[ids[j]]));
+    const delta = deltas.length ? deltas.reduce((a,b)=>a+b,0)/deltas.length : null;
+    return { ...o, avg, byUser, delta, pts };
+  });
+}
+
+function obraCardHTML(o, rank=null, showDate=false) {
+  const { bg, fg } = colorPlaceholder(o.titulo);
+  const imgContent = o.imagen_url
+    ? `<img src="${o.imagen_url}" alt="${o.titulo}" onerror="this.parentElement.innerHTML='<span style=\\'font-size:18px;font-weight:700;font-family:Playfair Display,serif\\'>${inicialesObra(o.titulo)}</span>';this.parentElement.style.background='${bg}';this.parentElement.style.color='${fg}'">`
+    : `<span style="font-size:18px;font-weight:700;font-family:'Playfair Display',serif;color:${fg}">${inicialesObra(o.titulo)}</span>`;
+  const imgBg = o.imagen_url ? '#EDE8DF' : bg;
+  const img = `<div class="obra-img" style="background:${imgBg}">${imgContent}</div>`;
+
+  const avgPill = o.avg !== null
+    ? `<span class="pill pill-avg">★ ${o.avg.toFixed(1)}</span>`
+    : '<span class="pill" style="background:#EDE8DF;color:var(--muted)">sin puntajes</span>';
+
+  // current user score pill
+  const myScore = o.byUser?.[currentUser?.id];
+  const myPill  = myScore !== undefined
+    ? `<span class="pill pill-user">vos: ${myScore}</span>`
+    : `<span class="pill" style="background:#EDE8DF;color:var(--muted);cursor:pointer" onclick="event.stopPropagation();openPuntuar('${o.id}','${esc(o.titulo)}')">+ puntuarla</span>`;
+
+  // others
+  const otherPills = Object.entries(o.byUser||{})
+    .filter(([uid])=>uid!==currentUser?.id)
+    .map(([uid,val])=>{
+      const u = allUsers.find(u=>u.id===uid);
+      return `<span class="pill pill-other">${u?u.nombre:'?'}: ${val}</span>`;
+    }).join('');
+
+  const deltaPill = o.delta !== null
+    ? `<span class="pill ${o.delta<=1?'pill-delta-lo':o.delta<=2?'pill-delta-md':'pill-delta-hi'}">Δ ${o.delta.toFixed(1)}</span>`
+    : '';
+
+  const rankBadge = rank ? `<div class="rank-num">${rank}</div>` : '';
+  const meta = [o.teatro, showDate && o.fecha ? formatFecha(o.fecha) : ''].filter(Boolean).join(' · ');
+
+  const tagsPills = o.genero
+    ? `<div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:5px">${o.genero.split(',').map(t=>`<span style="font-size:10px;padding:2px 8px;border-radius:999px;background:#EDE8DF;color:var(--muted)">${t.trim()}</span>`).join('')}</div>`
+    : '';
+
+  return `
+    <div class="obra-card" onclick="openDetalle('${o.id}')">
+      ${rankBadge}
+      ${img}
+      <div class="obra-body">
+        <div class="obra-titulo">${o.titulo}</div>
+        ${meta?`<div class="obra-meta">${meta}</div>`:''}
+        <div class="scores-row">${avgPill}${myPill}${otherPills}${deltaPill}</div>
+        ${tagsPills}
+      </div>
+    </div>`;
+}
+
+// ══════════════════════════════════════════
+//  HISTORIAL
+// ══════════════════════════════════════════
+function renderHistorial() {
+  // solo obras que YO puntué
+  const misObraIds = new Set(allPuntos.filter(p=>p.usuaria_id===currentUser?.id).map(p=>p.obra_id));
+  const todas = obrasConStats().filter(o=>misObraIds.has(o.id));
+  const obras = todas.filter(o=>o.fecha).sort((a,b)=>b.fecha.localeCompare(a.fecha));
+  const sinFecha = todas.filter(o=>!o.fecha);
+
+  if (!todas.length) { document.getElementById('listaHistorial').innerHTML = emptyState('Todavía no puntuaste ninguna obra','Agregá la primera con el botón +'); return; }
+
+  const MESES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+
+  const porAnio = {};
+  obras.forEach(o => {
+    const [y, m] = o.fecha.split('-');
+    if (!porAnio[y]) porAnio[y] = {};
+    if (!porAnio[y][m]) porAnio[y][m] = [];
+    porAnio[y][m].push(o);
+  });
+
+  function resumenGrupo(lista) {
+    const misPts = lista.map(o => {
+      const pt = allPuntos.find(p=>p.obra_id===o.id && p.usuaria_id===currentUser?.id);
+      return pt ? { titulo: o.titulo, puntaje: pt.puntaje } : null;
+    }).filter(Boolean);
+    if (!misPts.length) return '';
+    const mejor = misPts.reduce((a,b)=>a.puntaje>=b.puntaje?a:b);
+    const peor  = misPts.reduce((a,b)=>a.puntaje<=b.puntaje?a:b);
+    const prom  = (misPts.reduce((s,p)=>s+p.puntaje,0)/misPts.length).toFixed(1);
+    return `<div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:0.75rem 1rem;margin-bottom:10px;font-size:12px;display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
+      <div><div style="color:var(--muted);text-transform:uppercase;letter-spacing:0.04em;font-size:10px;margin-bottom:2px">obras</div><div style="font-family:'Playfair Display',serif;font-size:18px">${misPts.length}</div></div>
+      <div><div style="color:var(--muted);text-transform:uppercase;letter-spacing:0.04em;font-size:10px;margin-bottom:2px">mi promedio</div><div style="font-family:'Playfair Display',serif;font-size:18px">${prom}</div></div>
+      <div></div>
+      <div style="grid-column:span 3;display:flex;gap:8px;flex-wrap:wrap;margin-top:2px">
+        <span style="font-size:11px;background:#EAF3DE;color:#336600;padding:2px 9px;border-radius:999px">↑ ${mejor.titulo} (${mejor.puntaje})</span>
+        ${mejor.titulo!==peor.titulo?`<span style="font-size:11px;background:var(--red-light);color:var(--red);padding:2px 9px;border-radius:999px">↓ ${peor.titulo} (${peor.puntaje})</span>`:''}
+      </div>
+    </div>`;
+  }
+
+  let html = '';
+  Object.keys(porAnio).sort((a,b)=>b-a).forEach(anio => {
+    const todasDelAnio = Object.values(porAnio[anio]).flat();
+    html += `<div style="margin:1.5rem 0 0.5rem;display:flex;align-items:center;gap:10px">
+      <div style="font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700">${anio}</div>
+      <div style="flex:1;height:1px;background:var(--border)"></div>
+    </div>`;
+    html += resumenGrupo(todasDelAnio);
+    Object.keys(porAnio[anio]).sort((a,b)=>b-a).forEach(mes => {
+      const obrasDelMes = porAnio[anio][mes];
+      html += `<div style="margin:1rem 0 0.4rem">
+        <span style="font-size:11px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted)">${MESES[parseInt(mes)-1]}</span>
+      </div>`;
+      html += resumenGrupo(obrasDelMes);
+      html += obrasDelMes.map(o=>obraCardHTML(o,null,true)).join('');
+    });
+  });
+
+  if (sinFecha.length) {
+    html += `<div style="margin:1.5rem 0 0.5rem;display:flex;align-items:center;gap:10px">
+      <div style="font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--muted)">sin fecha</div>
+      <div style="flex:1;height:1px;background:var(--border)"></div>
+    </div>`;
+    html += sinFecha.map(o=>obraCardHTML(o,null,false)).join('');
+  }
+
+  document.getElementById('listaHistorial').innerHTML = html;
+}
+
+// ══════════════════════════════════════════
+//  PERFILES
+// ══════════════════════════════════════════
+function renderPerfiles() {
+  if (!allUsers.length) { document.getElementById('perfilesContent').innerHTML = emptyState('Sin usuarias',''); return; }
+  const html = `<div class="profile-cards">${allUsers.map(u=>perfilHTML(u)).join('')}</div>`;
+  document.getElementById('perfilesContent').innerHTML = html;
+}
+
+function perfilHTML(u) {
+  const pts   = allPuntos.filter(p=>p.usuaria_id===u.id);
+  const vals  = pts.map(p=>p.puntaje);
+  const prom  = vals.length ? (vals.reduce((a,b)=>a+b,0)/vals.length).toFixed(1) : '—';
+  const max   = vals.length ? Math.max(...vals) : '—';
+  const min   = vals.length ? Math.min(...vals) : '—';
+  // tag más frecuente
+  const tagsCount = {};
+  pts.forEach(p => {
+    const o = allObras.find(o=>o.id===p.obra_id);
+    if (o?.genero) o.genero.split(',').map(t=>t.trim()).forEach(t => {
+      tagsCount[t] = (tagsCount[t]||0)+1;
+    });
+  });
+  const fav = Object.entries(tagsCount).sort((a,b)=>b[1]-a[1])[0]?.[0] || '—';
+  const isMe = u.id === currentUser?.id;
+  const clickAttr = !isMe ? `onclick="openPerfilAjeno('${u.id}')" style="cursor:pointer"` : '';
+  return `
+    <div class="profile-card" ${clickAttr}>
+      <div class="profile-name">${isMe?'★ ':''}${u.nombre}${!isMe?' <span style="font-size:10px;color:var(--muted);font-family:DM Sans,sans-serif">ver →</span>':''}</div>
+      <div class="prow"><span>obras puntuadas</span><span>${pts.length}</span></div>
+      <div class="prow"><span>promedio</span><span>${prom}</span></div>
+      <div class="prow"><span>más alta</span><span>${max}</span></div>
+      <div class="prow"><span>más baja</span><span>${min}</span></div>
+      <div class="prow"><span>tag más frecuente</span><span style="font-size:11px">${fav}</span></div>
+    </div>`;
+}
+
+// ══════════════════════════════════════════
+//  ACUERDO
+// ══════════════════════════════════════════
+function poblarSelects() {
+  const opts = allUsers.map(u=>`<option value="${u.id}">${u.nombre}</option>`).join('');
+  document.getElementById('sel-a').innerHTML = opts;
+  document.getElementById('sel-b').innerHTML = opts;
+  // default: current user vs first other
+  document.getElementById('sel-a').value = currentUser?.id || allUsers[0]?.id;
+  const other = allUsers.find(u=>u.id!==currentUser?.id);
+  if (other) document.getElementById('sel-b').value = other.id;
+  // placeholder gracioso si hay una sola usuaria
+  if (allUsers.length < 2) {
+    document.getElementById('acuerdoContent').innerHTML =
+      `<div class="empty-state"><div class="big">🌭</div><p>Todavía sos la única. Invitá a <strong>SALCHICHA</strong> y a las demás a registrarse.</p></div>`;
+  }
+}
+
+function calcAcuerdo() {
+  const idA = document.getElementById('sel-a').value;
+  const idB = document.getElementById('sel-b').value;
+  if (idA === idB) { document.getElementById('acuerdoContent').innerHTML = '<div class="loading">elegí dos usuarias distintas</div>'; return; }
+  const uA = allUsers.find(u=>u.id===idA);
+  const uB = allUsers.find(u=>u.id===idB);
+
+  // obras que puntuaron ambas
+  const ptsA = allPuntos.filter(p=>p.usuaria_id===idA);
+  const ptsB = allPuntos.filter(p=>p.usuaria_id===idB);
+  const shared = ptsA.filter(a=>ptsB.find(b=>b.obra_id===a.obra_id));
+
+  if (!shared.length) {
+    document.getElementById('acuerdoContent').innerHTML = `<div class="empty-state"><div class="big">🤷</div><p>No hay obras que hayan puntuado las dos.</p></div>`;
+    return;
+  }
+
+  const deltas = shared.map(a => {
+    const b = ptsB.find(b=>b.obra_id===a.obra_id);
+    return { obra_id: a.obra_id, valA: a.puntaje, valB: b.puntaje, delta: Math.abs(a.puntaje-b.puntaje) };
+  });
+
+  const promDelta = (deltas.reduce((s,d)=>s+d.delta,0)/deltas.length).toFixed(2);
+  const masAcuerdo   = [...deltas].sort((a,b)=>a.delta-b.delta)[0];
+  const menosAcuerdo = [...deltas].sort((a,b)=>b.delta-a.delta)[0];
+  const oMas   = allObras.find(o=>o.id===masAcuerdo.obra_id);
+  const oMenos = allObras.find(o=>o.id===menosAcuerdo.obra_id);
+
+  // tabla obras compartidas
+  const tablaHTML = [...deltas].sort((a,b)=>a.delta-b.delta).map(d=>{
+    const o = allObras.find(o=>o.id===d.obra_id);
+    const cls = d.delta<=1?'pill-delta-lo':d.delta<=2?'pill-delta-md':'pill-delta-hi';
+    return `<div class="obra-card">
+      <div class="obra-body">
+        <div class="obra-titulo">${o?.titulo||'?'}</div>
+        <div class="scores-row">
+          <span class="pill pill-user">${uA.nombre}: ${d.valA}</span>
+          <span class="pill pill-other">${uB.nombre}: ${d.valB}</span>
+          <span class="pill ${cls}">Δ ${d.delta.toFixed(1)}</span>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('acuerdoContent').innerHTML = `
+    <div class="resumen-grid">
+      <div class="resumen-card">
+        <div class="resumen-icon">🎭</div>
+        <div class="resumen-label">obras comparadas</div>
+        <div class="resumen-val">${shared.length}</div>
+      </div>
+      <div class="resumen-card">
+        <div class="resumen-icon">📏</div>
+        <div class="resumen-label">diferencia promedio</div>
+        <div class="resumen-val">${promDelta}</div>
+        <div class="resumen-sub">puntos</div>
+      </div>
+      <div class="resumen-card">
+        <div class="resumen-icon">🤝</div>
+        <div class="resumen-label">más de acuerdo en</div>
+        <div class="resumen-val">${oMas?.titulo||'?'}</div>
+        <div class="resumen-sub">Δ ${masAcuerdo.delta.toFixed(1)}</div>
+      </div>
+      <div class="resumen-card">
+        <div class="resumen-icon">⚡</div>
+        <div class="resumen-label">menos de acuerdo en</div>
+        <div class="resumen-val">${oMenos?.titulo||'?'}</div>
+        <div class="resumen-sub">Δ ${menosAcuerdo.delta.toFixed(1)}</div>
+      </div>
+    </div>
+    <div class="sec-label">obras ordenadas por acuerdo</div>
+    ${tablaHTML}
+  `;
+}
+
+// ══════════════════════════════════════════
+//  MODALES
+// ══════════════════════════════════════════
+function openModal(id) {
+  document.getElementById('modal-'+id).classList.add('open');
+  if (id==='obra') {
+    buildStars('starsRow', 'selectedScore');
+    buildTags('tagsGrid');
+  }
+}
+function closeModal(id) {
+  document.getElementById('modal-'+id).classList.remove('open');
+  if (id==='obra') {
+    selectedScore=null;
+    obraExistenteSeleccionada=null;
+    document.getElementById('ob-msg').className='msg';
+    document.getElementById('ob-existente-aviso').style.display='none';
+    document.getElementById('titulo-sugg').style.display='none';
+  }
+  if (id==='puntuar') { selectedScorePuntuar=null; document.getElementById('puntuar-msg').className='msg'; }
+}
+
+function openPerfilAjeno(userId) {
+  const u = allUsers.find(u=>u.id===userId);
+  if (!u) return;
+  document.getElementById('perfil-nombre-label').textContent = u.nombre;
+
+  const pts  = allPuntos.filter(p=>p.usuaria_id===userId);
+  const vals = pts.map(p=>p.puntaje);
+  const prom = vals.length ? (vals.reduce((a,b)=>a+b,0)/vals.length).toFixed(1) : '—';
+  const max  = vals.length ? Math.max(...vals) : '—';
+  const min  = vals.length ? Math.min(...vals) : '—';
+
+  document.getElementById('perfil-stats').innerHTML = `
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
+      <div class="stat-card"><div class="stat-label">obras</div><div class="stat-val">${pts.length}</div></div>
+      <div class="stat-card"><div class="stat-label">promedio</div><div class="stat-val">${prom}</div></div>
+      <div class="stat-card"><div class="stat-label">rango</div><div class="stat-val" style="font-size:14px;padding-top:4px">${min} – ${max}</div></div>
+    </div>`;
+
+  // historial personal de esa usuaria agrupado por mes/año
+  const MESES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+  const susObras = obrasConStats()
+    .filter(o=>pts.find(p=>p.obra_id===o.id))
+    .sort((a,b)=>(b.fecha||'').localeCompare(a.fecha||''));
+
+  if (!susObras.length) {
+    document.getElementById('perfil-historial').innerHTML = '<div class="sin-comentarios">Sin obras aún.</div>';
+  } else {
+    document.getElementById('perfil-historial').innerHTML = susObras.map(o => {
+      const pt = pts.find(p=>p.obra_id===o.id);
+      return `<div class="obra-card" style="cursor:default">
+        <div class="obra-body">
+          <div class="obra-titulo">${o.titulo}</div>
+          <div class="obra-meta">${[o.teatro, o.fecha?formatFecha(o.fecha):''].filter(Boolean).join(' · ')}</div>
+          <div class="scores-row">
+            <span class="pill pill-avg">★ ${pt.puntaje}</span>
+            ${pt.nota?`<span style="font-size:12px;color:var(--muted);font-style:italic">"${pt.nota}"</span>`:''}
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  document.getElementById('modal-perfil').classList.add('open');
+}
+
+function openDetalle(obraId) {
+  const o = obrasConStats().find(o=>o.id===obraId);
+  if (!o) return;
+
+  document.getElementById('detalle-titulo').textContent = o.titulo;
+  document.getElementById('detalle-teatro').textContent = [o.teatro, o.fecha ? formatFecha(o.fecha) : ''].filter(Boolean).join(' · ');
+
+  // tags
+  const tagsEl = document.getElementById('detalle-tags');
+  tagsEl.innerHTML = o.genero
+    ? o.genero.split(',').map(t=>`<span style="font-size:11px;padding:3px 10px;border-radius:999px;background:#EDE8DF;color:var(--muted)">${t.trim()}</span>`).join('')
+    : '<span class="sin-comentarios">sin tags</span>';
+
+  // puntajes
+  const puntajesEl = document.getElementById('detalle-puntajes');
+  const pts = allPuntos.filter(p=>p.obra_id===obraId);
+  if (!pts.length) {
+    puntajesEl.innerHTML = '<div class="sin-comentarios">sin puntajes aún</div>';
+  } else {
+    puntajesEl.innerHTML = pts.map(p => {
+      const u = allUsers.find(u=>u.id===p.usuaria_id);
+      return `<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px">
+        <span>${u?.nombre || '?'}</span>
+        <span class="pill pill-avg" style="font-size:13px">★ ${p.puntaje}</span>
+      </div>`;
+    }).join('');
+  }
+
+  // comentarios
+  const comsEl = document.getElementById('detalle-comentarios');
+  const conNota = pts.filter(p=>p.nota && p.nota.trim());
+  if (!conNota.length) {
+    comsEl.innerHTML = '<div class="sin-comentarios">ninguna dejó un comentario</div>';
+  } else {
+    comsEl.innerHTML = conNota.map(p => {
+      const u = allUsers.find(u=>u.id===p.usuaria_id);
+      return `<div class="comentario-item">
+        <div class="comentario-autor">${u?.nombre || '?'}</div>
+        <div>${p.nota}</div>
+      </div>`;
+    }).join('');
+  }
+
+  document.getElementById('modal-detalle').classList.add('open');
+}
+
+function openPuntuar(obraId, titulo) {
+  puntuarObraId = obraId;
+  document.getElementById('puntuar-titulo-label').textContent = titulo;
+  buildStars('starsRowPuntuar', 'selectedScorePuntuar');
+  openModal('puntuar');
+}
+
+function buildStars(containerId, varName) {
+  const vals = [];
+  for (let v=1; v<=10; v+=0.5) vals.push(v);
+  document.getElementById(containerId).innerHTML = vals.map(v=>`
+    <button class="star-btn" onclick="selectScore(${v},'${containerId}','${varName}')">${v}</button>
+  `).join('');
+}
+
+function selectScore(val, containerId, varName) {
+  if (varName==='selectedScore') selectedScore=val;
+  else selectedScorePuntuar=val;
+  document.querySelectorAll(`#${containerId} .star-btn`).forEach(b=>{
+    b.classList.toggle('selected', parseFloat(b.textContent)===val);
+  });
+}
+
+// ══════════════════════════════════════════
+//  GUARDAR OBRA
+// ══════════════════════════════════════════
+async function guardarObra() {
+  const titulo = document.getElementById('ob-titulo').value.trim();
+  const fecha  = document.getElementById('ob-fecha').value;
+  const msg    = document.getElementById('ob-msg');
+  if (!titulo) { showMsg(msg,'El título es obligatorio','err'); return; }
+  if (!fecha)  { showMsg(msg,'La fecha es obligatoria','err'); return; }
+  if (!selectedScore) { showMsg(msg,'Elegí un puntaje','err'); return; }
+
+  const btn = document.getElementById('ob-btn');
+  btn.disabled = true; btn.textContent = 'guardando…';
+
+  try {
+    let obraId;
+
+    if (obraExistenteSeleccionada) {
+      // usar obra existente
+      obraId = obraExistenteSeleccionada.id;
+    } else {
+      // crear obra nueva
+      const tituloNorm = titulo.charAt(0).toUpperCase() + titulo.slice(1);
+      const [obra] = await sb('obras?select=id', {
+        method: 'POST',
+        headers: { ...HEADERS, 'Prefer': 'return=representation' },
+        body: JSON.stringify({
+          titulo:     tituloNorm,
+          teatro:     document.getElementById('ob-teatro').value.trim() || null,
+          fecha:      document.getElementById('ob-fecha').value || null,
+          genero:     selectedTags.length ? selectedTags.join(', ') : null,
+          creada_por: currentUser.id
+        })
+      });
+      obraId = obra.id;
+    }
+
+    // verificar que no haya puntuado esta obra antes
+    const yaVotó = allPuntos.find(p=>p.obra_id===obraId && p.usuaria_id===currentUser.id);
+    if (yaVotó) { showMsg(msg,'Ya puntuaste esta obra. Podés editarla desde el ranking.','err'); btn.disabled=false; btn.textContent='guardar'; return; }
+
+    await sb('puntuaciones', {
+      method: 'POST',
+      body: JSON.stringify({
+        obra_id:    obraId,
+        usuaria_id: currentUser.id,
+        puntaje:    selectedScore,
+        nota:       document.getElementById('ob-nota').value.trim() || null
+      })
+    });
+
+    closeModal('obra');
+    ['ob-titulo','ob-teatro','ob-fecha','ob-nota'].forEach(id=>document.getElementById(id).value='');
+    selectedTags = [];
+    document.getElementById('ob-existente-aviso').style.display = 'none';
+    obraExistenteSeleccionada = null;
+    selectedScore = null;
+    await loadAll();
+  } catch(e) {
+    showMsg(msg, e.message, 'err');
+  } finally {
+    btn.disabled = false; btn.textContent = 'guardar';
+  }
+}
+
+// ══════════════════════════════════════════
+//  GUARDAR PUNTAJE
+// ══════════════════════════════════════════
+async function guardarPuntaje() {
+  const msg = document.getElementById('puntuar-msg');
+  if (!selectedScorePuntuar) { showMsg(msg,'Elegí un puntaje','err'); return; }
+  try {
+    await sb('puntuaciones', {
+      method: 'POST',
+      headers: { ...HEADERS, 'Prefer': 'resolution=merge-duplicates' },
+      body: JSON.stringify({
+        obra_id:    puntuarObraId,
+        usuaria_id: currentUser.id,
+        puntaje:    selectedScorePuntuar,
+        nota:       document.getElementById('puntuar-nota').value.trim() || null
+      })
+    });
+    closeModal('puntuar');
+    document.getElementById('puntuar-nota').value = '';
+    selectedScorePuntuar = null;
+    await loadAll();
+  } catch(e) { showMsg(msg, e.message, 'err'); }
+}
+
+// ══════════════════════════════════════════
+//  TABS
+// ══════════════════════════════════════════
+function showTab(name, btn) {
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+  document.getElementById('sec-'+name).classList.add('active');
+  btn.classList.add('active');
+  if (name==='acuerdo') calcAcuerdo();
+}
+
+// ══════════════════════════════════════════
+//  UTILS
+// ══════════════════════════════════════════
+function formatFecha(d) {
+  if (!d) return '';
+  const [y,m,day] = d.split('-');
+  const meses = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+  return `${parseInt(day)} ${meses[parseInt(m)-1]} ${y}`;
+}
+function emptyState(title, sub) {
+  return `<div class="empty-state"><div class="big">🎭</div><p><strong>${title}</strong>${sub?'<br>'+sub:''}</p></div>`;
+}
+function esc(s) { return s.replace(/'/g,"\\'"); }
+
+// ══════════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════════
+const saved = localStorage.getItem('chicas_user');
+if (saved) {
+  try { setUser(JSON.parse(saved)); } catch { localStorage.removeItem('chicas_user'); }
+}
+</script>
+</body>
+</html>
