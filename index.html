@@ -1,0 +1,1204 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>las chicas van al teatro</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cream: #F5F0E8;
+  --ink: #1A1410;
+  --red: #C0392B;
+  --red-light: #F9EDED;
+  --gold: #B8860B;
+  --gold-light: #FBF5E0;
+  --border: rgba(26,20,16,0.12);
+  --muted: rgba(26,20,16,0.45);
+  --card: #FFFDF8;
+  --shadow: 0 2px 16px rgba(26,20,16,0.08);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--cream);
+  color: var(--ink);
+  min-height: 100vh;
+}
+
+/* ── HEADER ── */
+.header {
+  background: var(--ink);
+  color: var(--cream);
+  padding: 1.2rem 1.5rem 1rem;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.header-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+.header-title em { font-style: italic; color: #E8C99A; }
+.user-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 999px;
+  padding: 5px 12px 5px 5px;
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--cream);
+  white-space: nowrap;
+}
+.avatar {
+  width: 26px; height: 26px;
+  background: var(--red);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 500;
+}
+
+/* ── NAV ── */
+nav {
+  background: var(--ink);
+  border-top: 1px solid rgba(255,255,255,0.08);
+  display: flex;
+  overflow-x: auto;
+}
+nav button {
+  flex: 1;
+  min-width: 80px;
+  padding: 10px 4px;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: rgba(232,201,154,0.5);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.18s;
+}
+nav button.active {
+  color: #E8C99A;
+  border-bottom-color: #E8C99A;
+}
+
+/* ── MAIN ── */
+main { padding: 1.25rem 1rem 5rem; max-width: 680px; margin: 0 auto; }
+
+/* ── SECTIONS ── */
+.section { display: none; }
+.section.active { display: block; }
+
+/* ── OBRA CARD ── */
+.obra-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1rem;
+  margin-bottom: 10px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  box-shadow: var(--shadow);
+}
+.obra-img {
+  width: 62px; height: 62px;
+  border-radius: 8px;
+  object-fit: cover;
+  background: #EDE8DF;
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px;
+  overflow: hidden;
+}
+.obra-img img { width: 100%; height: 100%; object-fit: cover; border-radius: 8px; }
+.obra-body { flex: 1; min-width: 0; }
+.obra-titulo {
+  font-family: 'Playfair Display', serif;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 2px;
+}
+.obra-meta { font-size: 12px; color: var(--muted); margin-bottom: 7px; }
+.scores-row { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+.pill {
+  font-size: 12px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-weight: 500;
+}
+.pill-avg { background: var(--ink); color: var(--cream); }
+.pill-user { background: var(--gold-light); color: var(--gold); border: 1px solid rgba(184,134,11,0.2); }
+.pill-other { background: var(--red-light); color: var(--red); border: 1px solid rgba(192,57,43,0.15); }
+.pill-delta-lo { background: #EAF3DE; color: #336600; }
+.pill-delta-md { background: #FEF3E0; color: #7A4500; }
+.pill-delta-hi { background: var(--red-light); color: var(--red); }
+.rank-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  color: rgba(26,20,16,0.2);
+  min-width: 24px;
+  padding-top: 2px;
+  text-align: center;
+}
+
+/* ── STAT GRID ── */
+.stat-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin-bottom: 1.25rem; }
+.stat-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.7rem 0.9rem;
+}
+.stat-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; }
+.stat-val { font-family: 'Playfair Display', serif; font-size: 20px; }
+.stat-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+/* ── SECTION LABEL ── */
+.sec-label {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 1.2rem 0 0.7rem;
+}
+
+/* ── ACUERDO ── */
+.compare-sel {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 1rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.compare-sel select {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  padding: 6px 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--card);
+  color: var(--ink);
+  flex: 1;
+}
+.vs-label { font-size: 12px; color: var(--muted); font-style: italic; }
+
+.bar-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+.bar-key { font-size: 12px; width: 32px; text-align: right; color: var(--muted); }
+.bar-wrap { flex: 1; height: 12px; background: #EDE8DF; border-radius: 3px; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 3px; background: var(--red); }
+.bar-n { font-size: 11px; color: var(--muted); min-width: 18px; }
+
+/* ── PERFILES ── */
+.profile-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.profile-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1rem;
+}
+.profile-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 16px;
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+.prow { display: flex; justify-content: space-between; font-size: 12.5px; padding: 3px 0; }
+.prow span:last-child { font-weight: 500; }
+
+/* ── FAB ── */
+.fab {
+  position: fixed;
+  bottom: 1.5rem; right: 1.5rem;
+  background: var(--red);
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  padding: 13px 22px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(192,57,43,0.35);
+  display: flex; align-items: center; gap: 7px;
+  z-index: 100;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.fab:hover { transform: translateY(-1px); box-shadow: 0 6px 24px rgba(192,57,43,0.4); }
+
+/* ── MODAL OVERLAY ── */
+.overlay {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(26,20,16,0.55);
+  z-index: 200;
+  align-items: flex-end;
+  justify-content: center;
+}
+.overlay.open { display: flex; }
+.modal {
+  background: var(--cream);
+  border-radius: 18px 18px 0 0;
+  padding: 1.5rem 1.25rem 2rem;
+  width: 100%;
+  max-width: 680px;
+  max-height: 92vh;
+  overflow-y: auto;
+  animation: slideUp 0.22s ease;
+}
+@keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+
+.modal-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.15rem;
+  margin-bottom: 1.2rem;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.modal-close {
+  background: none; border: none; font-size: 20px;
+  cursor: pointer; color: var(--muted); line-height: 1;
+}
+
+/* ── FORM ── */
+.form-group { margin-bottom: 0.9rem; }
+.form-group label { display: block; font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 5px; }
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  padding: 9px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--card);
+  color: var(--ink);
+  outline: none;
+  transition: border-color 0.15s;
+}
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus { border-color: var(--red); }
+
+.stars-row { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px; }
+.star-btn {
+  padding: 6px 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--card);
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.12s;
+  font-family: 'DM Sans', sans-serif;
+}
+.star-btn.selected { background: var(--ink); color: var(--cream); border-color: var(--ink); }
+
+.btn-primary {
+  width: 100%;
+  padding: 12px;
+  background: var(--ink);
+  color: var(--cream);
+  border: none;
+  border-radius: 10px;
+  font-family: 'Playfair Display', serif;
+  font-size: 15px;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  transition: background 0.15s;
+}
+.btn-primary:hover { background: #2e2520; }
+.btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.btn-sec {
+  width: 100%;
+  padding: 10px;
+  background: none;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  cursor: pointer;
+  margin-top: 0.4rem;
+}
+
+/* ── LOGIN ── */
+.login-wrap {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1.5rem;
+  gap: 0;
+}
+.login-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  text-align: center;
+  line-height: 1.15;
+  margin-bottom: 0.4rem;
+}
+.login-title em { font-style: italic; color: var(--red); }
+.login-sub { font-size: 14px; color: var(--muted); text-align: center; margin-bottom: 2rem; }
+.login-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 1.5rem;
+  width: 100%;
+  max-width: 360px;
+  box-shadow: var(--shadow);
+}
+.login-tabs { display: flex; gap: 4px; margin-bottom: 1.2rem; background: #EDE8DF; border-radius: 8px; padding: 3px; }
+.login-tab {
+  flex: 1; padding: 7px; border: none; background: none;
+  border-radius: 6px; font-family: 'DM Sans', sans-serif; font-size: 13px;
+  cursor: pointer; color: var(--muted); transition: all 0.15s;
+}
+.login-tab.active { background: var(--card); color: var(--ink); font-weight: 500; }
+
+.msg { font-size: 13px; padding: 8px 12px; border-radius: 8px; margin-top: 0.5rem; display: none; }
+.msg.err { background: var(--red-light); color: var(--red); display: block; }
+.msg.ok { background: #EAF3DE; color: #336600; display: block; }
+
+.empty-state { text-align: center; padding: 3rem 1rem; color: var(--muted); }
+.empty-state .big { font-size: 2.5rem; margin-bottom: 0.5rem; }
+.empty-state p { font-size: 14px; }
+
+.loading { text-align: center; padding: 2rem; color: var(--muted); font-style: italic; font-size: 14px; }
+
+.sugg-list {
+  position: absolute;
+  top: 100%; left: 0; right: 0;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 0 0 10px 10px;
+  z-index: 300;
+  box-shadow: var(--shadow);
+  max-height: 200px;
+  overflow-y: auto;
+}
+.sugg-item {
+  padding: 9px 12px;
+  font-size: 13px;
+  cursor: pointer;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.sugg-item:last-child { border-bottom: none; }
+.sugg-item:hover { background: var(--cream); }
+.sugg-item .sugg-badge {
+  font-size: 10px;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: var(--gold-light);
+  color: var(--gold);
+  white-space: nowrap;
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════
+     LOGIN SCREEN
+══════════════════════════════════════════ -->
+<div id="loginScreen" class="login-wrap">
+  <p style="font-size:28px;margin-bottom:0.5rem">🎭</p>
+  <h1 class="login-title">las chicas van<br><em>al teatro</em></h1>
+  <p class="login-sub">tu registro teatral compartido</p>
+
+  <div class="login-card">
+    <div class="login-tabs">
+      <button class="login-tab active" onclick="switchLoginTab('ingresar')">ingresar</button>
+      <button class="login-tab" onclick="switchLoginTab('registrar')">registrarme</button>
+    </div>
+
+    <div id="tab-ingresar">
+      <div class="form-group">
+        <label>tu nombre</label>
+        <input id="li-nombre" type="text" placeholder="ej: Belén" autocomplete="off">
+      </div>
+      <div class="form-group">
+        <label>PIN (4 dígitos)</label>
+        <input id="li-pin" type="password" inputmode="numeric" maxlength="4" placeholder="••••">
+      </div>
+      <div id="li-msg" class="msg"></div>
+      <button class="btn-primary" onclick="doLogin()">entrar</button>
+    </div>
+
+    <div id="tab-registrar" style="display:none">
+      <div class="form-group">
+        <label>elegí un nombre</label>
+        <input id="re-nombre" type="text" placeholder="ej: Nadia" autocomplete="off">
+      </div>
+      <div class="form-group">
+        <label>elegí un PIN (4 dígitos)</label>
+        <input id="re-pin" type="password" inputmode="numeric" maxlength="4" placeholder="••••">
+      </div>
+      <div id="re-msg" class="msg"></div>
+      <button class="btn-primary" onclick="doRegistrar()">crear cuenta</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     APP
+══════════════════════════════════════════ -->
+<div id="appScreen" style="display:none">
+  <div class="header">
+    <div class="header-title">las chicas van<br><em>al teatro</em> 🎭</div>
+    <div class="user-badge" onclick="doLogout()">
+      <div class="avatar" id="avatarLetters"></div>
+      <span id="headerNombre"></span>
+    </div>
+  </div>
+  <nav>
+    <button class="active" onclick="showTab('ranking', this)">ranking</button>
+    <button onclick="showTab('acuerdo', this)">acuerdo</button>
+    <button onclick="showTab('perfiles', this)">perfiles</button>
+    <button onclick="showTab('historial', this)">historial</button>
+  </nav>
+
+  <main>
+    <!-- ── RANKING ── -->
+    <div id="sec-ranking" class="section active">
+      <div class="stat-grid" id="statsGlobal"></div>
+      <div class="sec-label">ranking · promedio entre todas</div>
+      <div id="listaRanking"><div class="loading">cargando obras…</div></div>
+    </div>
+
+    <!-- ── ACUERDO ── -->
+    <div id="sec-acuerdo" class="section">
+      <div class="compare-sel">
+        <select id="sel-a"></select>
+        <span class="vs-label">vs.</span>
+        <select id="sel-b"></select>
+        <button class="btn-primary" style="width:auto;padding:8px 16px;font-family:'DM Sans',sans-serif;font-size:13px;" onclick="calcAcuerdo()">comparar</button>
+      </div>
+      <div id="acuerdoContent"><div class="loading">seleccioná dos usuarias para comparar</div></div>
+    </div>
+
+    <!-- ── PERFILES ── -->
+    <div id="sec-perfiles" class="section">
+      <div id="perfilesContent"><div class="loading">cargando perfiles…</div></div>
+    </div>
+
+    <!-- ── HISTORIAL ── -->
+    <div id="sec-historial" class="section">
+      <div class="sec-label">cronológico · más reciente primero</div>
+      <div id="listaHistorial"><div class="loading">cargando historial…</div></div>
+    </div>
+  </main>
+
+  <button class="fab" onclick="openModal('obra')">+ obra</button>
+</div>
+
+<!-- ══════════════════════════════════════════
+     MODAL: AGREGAR OBRA
+══════════════════════════════════════════ -->
+<div class="overlay" id="modal-obra">
+  <div class="modal">
+    <div class="modal-title">
+      <span>nueva obra</span>
+      <button class="modal-close" onclick="closeModal('obra')">✕</button>
+    </div>
+
+    <!-- TÍTULO con autocomplete -->
+    <div class="form-group" style="position:relative">
+      <label>título *</label>
+      <input id="ob-titulo" type="text" placeholder="ej: Las siamesas" autocomplete="off"
+             oninput="buscarObrasExistentes(this.value)" onblur="setTimeout(()=>hideSuggestions('titulo-sugg'),200)">
+      <div id="titulo-sugg" class="sugg-list" style="display:none"></div>
+    </div>
+    <div id="ob-existente-aviso" style="display:none;font-size:12px;color:#336600;background:#EAF3DE;border-radius:8px;padding:8px 12px;margin-bottom:0.5rem">
+      ✓ Esta obra ya existe — se va a agregar tu puntaje a la que ya está cargada.
+    </div>
+
+    <!-- SALA con datalist curado -->
+    <div class="form-group">
+      <label>teatro / sala</label>
+      <input id="ob-teatro" type="text" list="salas-list" placeholder="escribí para buscar…" autocomplete="off">
+      <datalist id="salas-list"></datalist>
+    </div>
+
+    <div class="form-group">
+      <label>fecha</label>
+      <input id="ob-fecha" type="date">
+    </div>
+    <div class="form-group">
+      <label>género</label>
+      <select id="ob-genero">
+        <option value="">— elegir —</option>
+        <option>drama</option>
+        <option>comedia</option>
+        <option>under / experimental</option>
+        <option>musical</option>
+        <option>unipersonal</option>
+        <option>otro</option>
+      </select>
+    </div>
+
+    <!-- IMAGEN URL -->
+    <div class="form-group">
+      <label>foto de la obra (URL, opcional)</label>
+      <input id="ob-imagen" type="url" placeholder="https://… pegá el link de una imagen">
+      <div style="font-size:11px;color:var(--muted);margin-top:4px">podés buscar en Google Imágenes → clic derecho → copiar dirección de imagen</div>
+    </div>
+
+    <div class="form-group">
+      <label>tu puntaje *</label>
+      <div class="stars-row" id="starsRow"></div>
+    </div>
+    <div class="form-group">
+      <label>nota / comentario (opcional)</label>
+      <textarea id="ob-nota" rows="2" placeholder="algo que quieras recordar…"></textarea>
+    </div>
+    <div id="ob-msg" class="msg"></div>
+    <button class="btn-primary" id="ob-btn" onclick="guardarObra()">guardar</button>
+    <button class="btn-sec" onclick="closeModal('obra')">cancelar</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     MODAL: PUNTUAR OBRA EXISTENTE
+══════════════════════════════════════════ -->
+<div class="overlay" id="modal-puntuar">
+  <div class="modal">
+    <div class="modal-title">
+      <span id="puntuar-titulo-label">puntuar obra</span>
+      <button class="modal-close" onclick="closeModal('puntuar')">✕</button>
+    </div>
+    <div class="form-group">
+      <label>tu puntaje *</label>
+      <div class="stars-row" id="starsRowPuntuar"></div>
+    </div>
+    <div class="form-group">
+      <label>nota / comentario (opcional)</label>
+      <textarea id="puntuar-nota" rows="2" placeholder="algo que quieras recordar…"></textarea>
+    </div>
+    <div id="puntuar-msg" class="msg"></div>
+    <button class="btn-primary" onclick="guardarPuntaje()">guardar puntaje</button>
+    <button class="btn-sec" onclick="closeModal('puntuar')">cancelar</button>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════
+//  CONFIG
+// ══════════════════════════════════════════
+const SB_URL  = 'https://vmzvsascpvjywmpbfpwm.supabase.co';
+const SB_KEY  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZtenZzYXNjcHZqeXdtcGJmcHdtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4NzMxMjksImV4cCI6MjA5NDQ0OTEyOX0.RoKK5h3nZFna29OL-QbiByBG83SXxsx96djNOq7tlcs';
+const HEADERS = { 'Content-Type': 'application/json', 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY };
+
+// ══════════════════════════════════════════
+//  STATE
+// ══════════════════════════════════════════
+let currentUser = null;  // { id, nombre }
+let allObras    = [];
+let allPuntos   = [];
+let allUsers    = [];
+let puntuarObraId = null;
+let selectedScore = null;
+let selectedScorePuntuar = null;
+
+// ══════════════════════════════════════════
+//  HASH PIN (simple, client-side)
+// ══════════════════════════════════════════
+async function hashPin(pin) {
+  const buf  = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(pin));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+}
+
+// ══════════════════════════════════════════
+//  SUPABASE HELPERS
+// ══════════════════════════════════════════
+async function sb(path, opts={}) {
+  const res = await fetch(SB_URL + '/rest/v1/' + path, { headers: HEADERS, ...opts });
+  if (!res.ok) { const e = await res.json(); throw new Error(e.message || 'Error'); }
+  try { return await res.json(); } catch { return null; }
+}
+
+// ══════════════════════════════════════════
+//  LOGIN / REGISTER
+// ══════════════════════════════════════════
+function switchLoginTab(tab) {
+  document.getElementById('tab-ingresar').style.display  = tab==='ingresar'  ? '' : 'none';
+  document.getElementById('tab-registrar').style.display = tab==='registrar' ? '' : 'none';
+  document.querySelectorAll('.login-tab').forEach((b,i)=>b.classList.toggle('active', (i===0&&tab==='ingresar')||(i===1&&tab==='registrar')));
+}
+
+async function doLogin() {
+  const nombre = document.getElementById('li-nombre').value.trim();
+  const pin    = document.getElementById('li-pin').value.trim();
+  const msg    = document.getElementById('li-msg');
+  msg.className = 'msg';
+  if (!nombre || pin.length < 4) { showMsg(msg,'Completá nombre y PIN de 4 dígitos','err'); return; }
+  try {
+    const hash = await hashPin(pin);
+    const rows = await sb(`usuarias?nombre=eq.${encodeURIComponent(nombre)}&select=id,nombre,pin_hash`);
+    if (!rows.length) { showMsg(msg,'No existe esa usuaria. ¿Querés registrarte?','err'); return; }
+    if (rows[0].pin_hash !== hash) { showMsg(msg,'PIN incorrecto','err'); return; }
+    setUser({ id: rows[0].id, nombre: rows[0].nombre });
+  } catch(e) { showMsg(msg, e.message, 'err'); }
+}
+
+async function doRegistrar() {
+  const nombre = document.getElementById('re-nombre').value.trim();
+  const pin    = document.getElementById('re-pin').value.trim();
+  const msg    = document.getElementById('re-msg');
+  msg.className = 'msg';
+  if (!nombre || pin.length < 4) { showMsg(msg,'Completá nombre y PIN de 4 dígitos','err'); return; }
+  try {
+    const hash = await hashPin(pin);
+    const rows = await sb('usuarias?select=id&nombre=eq.' + encodeURIComponent(nombre));
+    if (rows.length) { showMsg(msg,'Ese nombre ya existe. Elegí otro.','err'); return; }
+    const [created] = await sb('usuarias?select=id,nombre', {
+      method: 'POST',
+      headers: { ...HEADERS, 'Prefer': 'return=representation' },
+      body: JSON.stringify({ nombre, pin_hash: hash })
+    });
+    setUser({ id: created.id, nombre: created.nombre });
+  } catch(e) { showMsg(msg, e.message, 'err'); }
+}
+
+function setUser(u) {
+  currentUser = u;
+  localStorage.setItem('chicas_user', JSON.stringify(u));
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('appScreen').style.display   = '';
+  document.getElementById('headerNombre').textContent  = u.nombre;
+  document.getElementById('avatarLetters').textContent = u.nombre[0].toUpperCase();
+  loadAll();
+}
+
+function doLogout() {
+  if (!confirm('¿Salir?')) return;
+  currentUser = null;
+  localStorage.removeItem('chicas_user');
+  document.getElementById('appScreen').style.display   = 'none';
+  document.getElementById('loginScreen').style.display = '';
+}
+
+function showMsg(el, txt, type) { el.textContent = txt; el.className = 'msg ' + type; }
+
+// ══════════════════════════════════════════
+//  LOAD DATA
+// ══════════════════════════════════════════
+async function loadAll() {
+  [allObras, allPuntos, allUsers] = await Promise.all([
+    sb('obras?select=*&order=fecha.desc'),
+    sb('puntuaciones?select=*'),
+    sb('usuarias?select=id,nombre&order=nombre.asc')
+  ]);
+  renderRanking();
+  renderHistorial();
+  renderPerfiles();
+  poblarSelects();
+  initSalas();
+}
+
+// ══════════════════════════════════════════
+//  SALAS PORTEÑAS
+// ══════════════════════════════════════════
+const SALAS_BA = [
+  // Oficiales / grandes
+  "Teatro Colón","Teatro San Martín","Teatro Cervantes","Teatro Presidente Alvear",
+  "Teatro Regio","Teatro Liceo","Teatro de la Ribera","Teatro Sarmiento",
+  // Comerciales
+  "Teatro El Nacional","Teatro Lola Membrives","Teatro Metropolitan Sura",
+  "Teatro Maipo","Teatro Picadilly","Teatro Gran Rex","Teatro Ópera",
+  "Teatro Multiteatro","Teatro Astral","Teatro La Plaza","Teatro Auditorium",
+  // Off y medios
+  "El Método Kairós","Teatro del Pueblo","Camarín de las Musas","El Portón de Sánchez",
+  "Centro Cultural de la Cooperación","La Carpintería","Timbre 4","El Extranjero",
+  "Teatro Pata de Ganso","Vera Vera Teatro","La Casona del Teatro","Teatro IFT",
+  "El Cubo","Espacio Callejón","El Galpón de Guevara","La Tertulia",
+  "Abasto Social Club","Teatro Beckett","Casa Brandon","Complejo La Plaza",
+  // Under / alternativos
+  "CELCIT","Club de Teatro","Teatro Anfitrión","La Covacha","El Tinglado",
+  "Espacio SAGAI","Teatro del Abasto","El Vitral","La Mueca","Hasta Trilce",
+  "Espacio Aguirre","Nün Teatro Espacio","Teatro Tadrón","Pan y Arte",
+  "FIBA","Centro Cultural Ricardo Rojas","Centro Cultural Recoleta",
+  "Centro Cultural Kirchner (CCK)","Centro Cultural Borges","La Usina del Arte",
+  "Fundación PROA","Matienzo Centro Cultural","La Tangente",
+  "El Konex / Ciudad Cultural Konex","Centro Cultural Matienzo",
+  // Centros culturales barriales
+  "CC Floresta","CC San Telmo","CC Haedo","CC La Ferrere",
+  "CC Palermo","CC Caballito","CC Barracas","CC Villa del Parque",
+];
+
+function initSalas() {
+  const dl = document.getElementById('salas-list');
+  dl.innerHTML = SALAS_BA.map(s=>`<option value="${s}">`).join('');
+}
+
+// ══════════════════════════════════════════
+//  AUTOCOMPLETE OBRAS EXISTENTES
+// ══════════════════════════════════════════
+let obraExistenteSeleccionada = null;
+
+function buscarObrasExistentes(query) {
+  obraExistenteSeleccionada = null;
+  document.getElementById('ob-existente-aviso').style.display = 'none';
+  const sugg = document.getElementById('titulo-sugg');
+  if (!query || query.length < 2) { sugg.style.display='none'; return; }
+  const q = query.toLowerCase();
+  const matches = allObras.filter(o => o.titulo.toLowerCase().includes(q)).slice(0, 6);
+  if (!matches.length) { sugg.style.display='none'; return; }
+  sugg.innerHTML = matches.map(o => {
+    const pts = allPuntos.filter(p=>p.obra_id===o.id).length;
+    return `<div class="sugg-item" onmousedown="seleccionarObraExistente('${o.id}')">
+      <span style="flex:1">${o.titulo}</span>
+      <span class="sugg-badge">${pts} puntaje${pts!==1?'s':''}</span>
+    </div>`;
+  }).join('');
+  sugg.style.display = 'block';
+}
+
+function seleccionarObraExistente(id) {
+  const obra = allObras.find(o=>o.id===id);
+  if (!obra) return;
+  obraExistenteSeleccionada = obra;
+  document.getElementById('ob-titulo').value  = obra.titulo;
+  document.getElementById('ob-teatro').value  = obra.teatro || '';
+  document.getElementById('ob-fecha').value   = obra.fecha  || '';
+  document.getElementById('ob-genero').value  = obra.genero || '';
+  document.getElementById('ob-imagen').value  = obra.imagen_url || '';
+  document.getElementById('titulo-sugg').style.display = 'none';
+  document.getElementById('ob-existente-aviso').style.display = 'block';
+}
+
+function hideSuggestions(id) {
+  const el = document.getElementById(id);
+  if (el) el.style.display = 'none';
+}
+
+// ══════════════════════════════════════════
+//  IMAGEN: placeholder con iniciales
+// ══════════════════════════════════════════
+function inicialesObra(titulo) {
+  return titulo.split(' ')
+    .filter(w => w.length > 2)
+    .slice(0, 2)
+    .map(w => w[0].toUpperCase())
+    .join('') || titulo[0].toUpperCase();
+}
+
+// colores para el placeholder basados en el título
+function colorPlaceholder(titulo) {
+  const paleta = [
+    ['#2C1654','#E8C99A'],['#4A0E0E','#F5C6C6'],['#0B3D2E','#B8E0CE'],
+    ['#1A2744','#C0CFEA'],['#3D2B00','#F0D9A0'],['#2A0A3A','#D4B8E8'],
+  ];
+  let hash = 0;
+  for (const c of titulo) hash = (hash * 31 + c.charCodeAt(0)) & 0xFFFF;
+  const [bg, fg] = paleta[hash % paleta.length];
+  return { bg, fg };
+}
+
+// ══════════════════════════════════════════
+//  RANKING
+// ══════════════════════════════════════════
+function renderRanking() {
+  const obras = obrasConStats();
+  // global stats
+  const totalObras  = obras.length;
+  const promedios   = obras.map(o=>o.avg).filter(n=>!isNaN(n));
+  const promGlobal  = promedios.length ? (promedios.reduce((a,b)=>a+b,0)/promedios.length).toFixed(1) : '—';
+  const maxAcuerdo  = obras.filter(o=>o.delta!==null).sort((a,b)=>a.delta-b.delta)[0];
+  document.getElementById('statsGlobal').innerHTML = `
+    <div class="stat-card"><div class="stat-label">obras vistas</div><div class="stat-val">${totalObras}</div></div>
+    <div class="stat-card"><div class="stat-label">promedio general</div><div class="stat-val">${promGlobal}</div></div>
+    <div class="stat-card"><div class="stat-label">mayor acuerdo</div><div class="stat-val" style="font-size:13px;padding-top:6px">${maxAcuerdo ? maxAcuerdo.titulo : '—'}</div></div>
+  `;
+  const sorted = [...obras].filter(o=>o.avg!==null).sort((a,b)=>b.avg-a.avg);
+  if (!sorted.length) { document.getElementById('listaRanking').innerHTML = emptyState('Todavía no hay obras','Agregá la primera con el botón +'); return; }
+  document.getElementById('listaRanking').innerHTML = sorted.map((o,i)=>obraCardHTML(o, i+1)).join('');
+}
+
+function obrasConStats() {
+  return allObras.map(o => {
+    const pts  = allPuntos.filter(p=>p.obra_id===o.id);
+    const vals = pts.map(p=>p.puntaje);
+    const avg  = vals.length ? vals.reduce((a,b)=>a+b,0)/vals.length : null;
+    // per user scores
+    const byUser = {};
+    pts.forEach(p => { byUser[p.usuaria_id] = p.puntaje; });
+    // delta: all pairs
+    const ids = Object.keys(byUser);
+    let deltas = [];
+    for (let i=0;i<ids.length;i++) for(let j=i+1;j<ids.length;j++)
+      deltas.push(Math.abs(byUser[ids[i]] - byUser[ids[j]]));
+    const delta = deltas.length ? deltas.reduce((a,b)=>a+b,0)/deltas.length : null;
+    return { ...o, avg, byUser, delta, pts };
+  });
+}
+
+function obraCardHTML(o, rank=null, showDate=false) {
+  const { bg, fg } = colorPlaceholder(o.titulo);
+  const imgContent = o.imagen_url
+    ? `<img src="${o.imagen_url}" alt="${o.titulo}" onerror="this.parentElement.innerHTML='<span style=\\'font-size:18px;font-weight:700;font-family:Playfair Display,serif\\'>${inicialesObra(o.titulo)}</span>';this.parentElement.style.background='${bg}';this.parentElement.style.color='${fg}'">`
+    : `<span style="font-size:18px;font-weight:700;font-family:'Playfair Display',serif;color:${fg}">${inicialesObra(o.titulo)}</span>`;
+  const imgBg = o.imagen_url ? '#EDE8DF' : bg;
+  const img = `<div class="obra-img" style="background:${imgBg}">${imgContent}</div>`;
+
+  const avgPill = o.avg !== null
+    ? `<span class="pill pill-avg">★ ${o.avg.toFixed(1)}</span>`
+    : '<span class="pill" style="background:#EDE8DF;color:var(--muted)">sin puntajes</span>';
+
+  // current user score pill
+  const myScore = o.byUser?.[currentUser?.id];
+  const myPill  = myScore !== undefined
+    ? `<span class="pill pill-user">vos: ${myScore}</span>`
+    : `<span class="pill" style="background:#EDE8DF;color:var(--muted);cursor:pointer" onclick="openPuntuar('${o.id}','${esc(o.titulo)}')">+ puntuarla</span>`;
+
+  // others
+  const otherPills = Object.entries(o.byUser||{})
+    .filter(([uid])=>uid!==currentUser?.id)
+    .map(([uid,val])=>{
+      const u = allUsers.find(u=>u.id===uid);
+      return `<span class="pill pill-other">${u?u.nombre:'?'}: ${val}</span>`;
+    }).join('');
+
+  const deltaPill = o.delta !== null
+    ? `<span class="pill ${o.delta<=1?'pill-delta-lo':o.delta<=2?'pill-delta-md':'pill-delta-hi'}">Δ ${o.delta.toFixed(1)}</span>`
+    : '';
+
+  const rankBadge = rank ? `<div class="rank-num">${rank}</div>` : '';
+  const meta = [o.teatro, showDate&&o.fecha?formatFecha(o.fecha):o.fecha?formatFecha(o.fecha):''].filter(Boolean).join(' · ');
+
+  return `
+    <div class="obra-card">
+      ${rankBadge}
+      ${img}
+      <div class="obra-body">
+        <div class="obra-titulo">${o.titulo}</div>
+        ${meta?`<div class="obra-meta">${meta}</div>`:''}
+        <div class="scores-row">${avgPill}${myPill}${otherPills}${deltaPill}</div>
+      </div>
+    </div>`;
+}
+
+// ══════════════════════════════════════════
+//  HISTORIAL
+// ══════════════════════════════════════════
+function renderHistorial() {
+  const obras = obrasConStats().sort((a,b)=>(b.fecha||'').localeCompare(a.fecha||''));
+  if (!obras.length) { document.getElementById('listaHistorial').innerHTML = emptyState('Sin historial aún',''); return; }
+  document.getElementById('listaHistorial').innerHTML = obras.map(o=>obraCardHTML(o,null,true)).join('');
+}
+
+// ══════════════════════════════════════════
+//  PERFILES
+// ══════════════════════════════════════════
+function renderPerfiles() {
+  if (!allUsers.length) { document.getElementById('perfilesContent').innerHTML = emptyState('Sin usuarias',''); return; }
+  const html = `<div class="profile-cards">${allUsers.map(u=>perfilHTML(u)).join('')}</div>`;
+  document.getElementById('perfilesContent').innerHTML = html;
+}
+
+function perfilHTML(u) {
+  const pts   = allPuntos.filter(p=>p.usuaria_id===u.id);
+  const vals  = pts.map(p=>p.puntaje);
+  const prom  = vals.length ? (vals.reduce((a,b)=>a+b,0)/vals.length).toFixed(1) : '—';
+  const max   = vals.length ? Math.max(...vals) : '—';
+  const min   = vals.length ? Math.min(...vals) : '—';
+  // genre fav
+  const genresCount = {};
+  pts.forEach(p => {
+    const o = allObras.find(o=>o.id===p.obra_id);
+    if (o?.genero) genresCount[o.genero] = (genresCount[o.genero]||0)+1;
+  });
+  const fav = Object.entries(genresCount).sort((a,b)=>b[1]-a[1])[0]?.[0] || '—';
+  const isMe = u.id === currentUser?.id;
+  return `
+    <div class="profile-card">
+      <div class="profile-name">${isMe?'★ ':''}${u.nombre}</div>
+      <div class="prow"><span>obras puntuadas</span><span>${pts.length}</span></div>
+      <div class="prow"><span>promedio</span><span>${prom}</span></div>
+      <div class="prow"><span>más alta</span><span>${max}</span></div>
+      <div class="prow"><span>más baja</span><span>${min}</span></div>
+      <div class="prow"><span>género favorito</span><span style="font-size:11px">${fav}</span></div>
+    </div>`;
+}
+
+// ══════════════════════════════════════════
+//  ACUERDO
+// ══════════════════════════════════════════
+function poblarSelects() {
+  const opts = allUsers.map(u=>`<option value="${u.id}">${u.nombre}</option>`).join('');
+  document.getElementById('sel-a').innerHTML = opts;
+  document.getElementById('sel-b').innerHTML = opts;
+  // default: current user vs first other
+  document.getElementById('sel-a').value = currentUser?.id || allUsers[0]?.id;
+  const other = allUsers.find(u=>u.id!==currentUser?.id);
+  if (other) document.getElementById('sel-b').value = other.id;
+  // placeholder gracioso si hay una sola usuaria
+  if (allUsers.length < 2) {
+    document.getElementById('acuerdoContent').innerHTML =
+      `<div class="empty-state"><div class="big">🌭</div><p>Todavía sos la única. Invitá a <strong>SALCHICHA</strong> y a las demás a registrarse.</p></div>`;
+  }
+}
+
+function calcAcuerdo() {
+  const idA = document.getElementById('sel-a').value;
+  const idB = document.getElementById('sel-b').value;
+  if (idA === idB) { document.getElementById('acuerdoContent').innerHTML = '<div class="loading">elegí dos usuarias distintas</div>'; return; }
+  const uA = allUsers.find(u=>u.id===idA);
+  const uB = allUsers.find(u=>u.id===idB);
+
+  // obras que puntuaron ambas
+  const ptsA = allPuntos.filter(p=>p.usuaria_id===idA);
+  const ptsB = allPuntos.filter(p=>p.usuaria_id===idB);
+  const shared = ptsA.filter(a=>ptsB.find(b=>b.obra_id===a.obra_id));
+
+  if (!shared.length) {
+    document.getElementById('acuerdoContent').innerHTML = `<div class="empty-state"><div class="big">🤷</div><p>No hay obras que hayan puntuado las dos.</p></div>`;
+    return;
+  }
+
+  const deltas = shared.map(a => {
+    const b = ptsB.find(b=>b.obra_id===a.obra_id);
+    return { obra_id: a.obra_id, valA: a.puntaje, valB: b.puntaje, delta: Math.abs(a.puntaje-b.puntaje) };
+  });
+
+  const promDelta = (deltas.reduce((s,d)=>s+d.delta,0)/deltas.length).toFixed(2);
+  const masAcuerdo = deltas.sort((a,b)=>a.delta-b.delta)[0];
+  const menosAcuerdo = [...deltas].sort((a,b)=>b.delta-a.delta)[0];
+  const oA = allObras.find(o=>o.id===masAcuerdo.obra_id);
+  const oB = allObras.find(o=>o.id===menosAcuerdo.obra_id);
+
+  // distribution
+  const bins = {'0–0.5':0,'1–1.5':0,'2–2.5':0,'3+':0};
+  deltas.forEach(d=>{
+    if(d.delta<=0.5) bins['0–0.5']++;
+    else if(d.delta<=1.5) bins['1–1.5']++;
+    else if(d.delta<=2.5) bins['2–2.5']++;
+    else bins['3+']++;
+  });
+  const maxBin = Math.max(...Object.values(bins));
+
+  const barsHTML = Object.entries(bins).map(([k,v])=>`
+    <div class="bar-row">
+      <div class="bar-key">${k}</div>
+      <div class="bar-wrap"><div class="bar-fill" style="width:${maxBin?v/maxBin*100:0}%"></div></div>
+      <div class="bar-n">${v}</div>
+    </div>`).join('');
+
+  // tabla obras compartidas
+  const tablaHTML = [...deltas].sort((a,b)=>a.delta-b.delta).map(d=>{
+    const o = allObras.find(o=>o.id===d.obra_id);
+    const cls = d.delta<=1?'pill-delta-lo':d.delta<=2?'pill-delta-md':'pill-delta-hi';
+    return `<div class="obra-card">
+      <div class="obra-body">
+        <div class="obra-titulo">${o?.titulo||'?'}</div>
+        <div class="scores-row">
+          <span class="pill pill-user">${uA.nombre}: ${d.valA}</span>
+          <span class="pill pill-other">${uB.nombre}: ${d.valB}</span>
+          <span class="pill ${cls}">Δ ${d.delta.toFixed(1)}</span>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('acuerdoContent').innerHTML = `
+    <div class="stat-grid">
+      <div class="stat-card"><div class="stat-label">obras comparadas</div><div class="stat-val">${shared.length}</div></div>
+      <div class="stat-card"><div class="stat-label">diferencia promedio</div><div class="stat-val">${promDelta}</div><div class="stat-sub">puntos</div></div>
+      <div class="stat-card"><div class="stat-label">más de acuerdo en</div><div class="stat-val" style="font-size:12px;padding-top:5px">${oA?.titulo||'?'}</div></div>
+    </div>
+    <div class="sec-label">distribución de diferencias</div>
+    ${barsHTML}
+    <div class="sec-label" style="margin-top:1.2rem">obras ordenadas por acuerdo</div>
+    ${tablaHTML}
+  `;
+}
+
+// ══════════════════════════════════════════
+//  MODALES
+// ══════════════════════════════════════════
+function openModal(id) {
+  document.getElementById('modal-'+id).classList.add('open');
+  if (id==='obra') buildStars('starsRow', 'selectedScore');
+}
+function closeModal(id) {
+  document.getElementById('modal-'+id).classList.remove('open');
+  if (id==='obra') {
+    selectedScore=null;
+    obraExistenteSeleccionada=null;
+    document.getElementById('ob-msg').className='msg';
+    document.getElementById('ob-existente-aviso').style.display='none';
+    document.getElementById('titulo-sugg').style.display='none';
+  }
+  if (id==='puntuar') { selectedScorePuntuar=null; document.getElementById('puntuar-msg').className='msg'; }
+}
+
+function openPuntuar(obraId, titulo) {
+  puntuarObraId = obraId;
+  document.getElementById('puntuar-titulo-label').textContent = titulo;
+  buildStars('starsRowPuntuar', 'selectedScorePuntuar');
+  openModal('puntuar');
+}
+
+function buildStars(containerId, varName) {
+  const vals = [];
+  for (let v=1; v<=10; v+=0.5) vals.push(v);
+  document.getElementById(containerId).innerHTML = vals.map(v=>`
+    <button class="star-btn" onclick="selectScore(${v},'${containerId}','${varName}')">${v}</button>
+  `).join('');
+}
+
+function selectScore(val, containerId, varName) {
+  if (varName==='selectedScore') selectedScore=val;
+  else selectedScorePuntuar=val;
+  document.querySelectorAll(`#${containerId} .star-btn`).forEach(b=>{
+    b.classList.toggle('selected', parseFloat(b.textContent)===val);
+  });
+}
+
+// ══════════════════════════════════════════
+//  GUARDAR OBRA
+// ══════════════════════════════════════════
+async function guardarObra() {
+  const titulo = document.getElementById('ob-titulo').value.trim();
+  const msg    = document.getElementById('ob-msg');
+  if (!titulo) { showMsg(msg,'El título es obligatorio','err'); return; }
+  if (!selectedScore) { showMsg(msg,'Elegí un puntaje','err'); return; }
+
+  const btn = document.getElementById('ob-btn');
+  btn.disabled = true; btn.textContent = 'guardando…';
+
+  try {
+    let obraId;
+
+    if (obraExistenteSeleccionada) {
+      // usar obra existente
+      obraId = obraExistenteSeleccionada.id;
+      // actualizar imagen si se pegó una nueva
+      const imgUrl = document.getElementById('ob-imagen').value.trim();
+      if (imgUrl && imgUrl !== obraExistenteSeleccionada.imagen_url) {
+        await sb('obras?id=eq.' + obraId, { method: 'PATCH', body: JSON.stringify({ imagen_url: imgUrl }) });
+      }
+    } else {
+      // crear obra nueva
+      const tituloNorm = titulo.charAt(0).toUpperCase() + titulo.slice(1);
+      const [obra] = await sb('obras?select=id', {
+        method: 'POST',
+        headers: { ...HEADERS, 'Prefer': 'return=representation' },
+        body: JSON.stringify({
+          titulo:     tituloNorm,
+          teatro:     document.getElementById('ob-teatro').value.trim() || null,
+          fecha:      document.getElementById('ob-fecha').value || null,
+          genero:     document.getElementById('ob-genero').value || null,
+          imagen_url: document.getElementById('ob-imagen').value.trim() || null,
+          creada_por: currentUser.id
+        })
+      });
+      obraId = obra.id;
+    }
+
+    // verificar que no haya puntuado esta obra antes
+    const yaVotó = allPuntos.find(p=>p.obra_id===obraId && p.usuaria_id===currentUser.id);
+    if (yaVotó) { showMsg(msg,'Ya puntuaste esta obra. Podés editarla desde el ranking.','err'); btn.disabled=false; btn.textContent='guardar'; return; }
+
+    await sb('puntuaciones', {
+      method: 'POST',
+      body: JSON.stringify({
+        obra_id:    obraId,
+        usuaria_id: currentUser.id,
+        puntaje:    selectedScore,
+        nota:       document.getElementById('ob-nota').value.trim() || null
+      })
+    });
+
+    closeModal('obra');
+    ['ob-titulo','ob-teatro','ob-fecha','ob-nota','ob-imagen'].forEach(id=>document.getElementById(id).value='');
+    document.getElementById('ob-genero').value = '';
+    document.getElementById('ob-existente-aviso').style.display = 'none';
+    obraExistenteSeleccionada = null;
+    selectedScore = null;
+    await loadAll();
+  } catch(e) {
+    showMsg(msg, e.message, 'err');
+  } finally {
+    btn.disabled = false; btn.textContent = 'guardar';
+  }
+}
+
+// ══════════════════════════════════════════
+//  GUARDAR PUNTAJE
+// ══════════════════════════════════════════
+async function guardarPuntaje() {
+  const msg = document.getElementById('puntuar-msg');
+  if (!selectedScorePuntuar) { showMsg(msg,'Elegí un puntaje','err'); return; }
+  try {
+    await sb('puntuaciones', {
+      method: 'POST',
+      headers: { ...HEADERS, 'Prefer': 'resolution=merge-duplicates' },
+      body: JSON.stringify({
+        obra_id:    puntuarObraId,
+        usuaria_id: currentUser.id,
+        puntaje:    selectedScorePuntuar,
+        nota:       document.getElementById('puntuar-nota').value.trim() || null
+      })
+    });
+    closeModal('puntuar');
+    document.getElementById('puntuar-nota').value = '';
+    selectedScorePuntuar = null;
+    await loadAll();
+  } catch(e) { showMsg(msg, e.message, 'err'); }
+}
+
+// ══════════════════════════════════════════
+//  TABS
+// ══════════════════════════════════════════
+function showTab(name, btn) {
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+  document.getElementById('sec-'+name).classList.add('active');
+  btn.classList.add('active');
+  if (name==='acuerdo') calcAcuerdo();
+}
+
+// ══════════════════════════════════════════
+//  UTILS
+// ══════════════════════════════════════════
+function formatFecha(d) {
+  if (!d) return '';
+  const [y,m,day] = d.split('-');
+  const meses = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+  return `${parseInt(day)} ${meses[parseInt(m)-1]} ${y}`;
+}
+function emptyState(title, sub) {
+  return `<div class="empty-state"><div class="big">🎭</div><p><strong>${title}</strong>${sub?'<br>'+sub:''}</p></div>`;
+}
+function esc(s) { return s.replace(/'/g,"\\'"); }
+
+// ══════════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════════
+const saved = localStorage.getItem('chicas_user');
+if (saved) {
+  try { setUser(JSON.parse(saved)); } catch { localStorage.removeItem('chicas_user'); }
+}
+</script>
+</body>
+</html>
